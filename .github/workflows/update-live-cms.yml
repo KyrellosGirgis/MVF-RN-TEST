@@ -35,3 +35,7 @@ jobs:
           git push origin HEAD:refs/heads/update-cms
           hub pull-request -b am-vodafone:main -h kyrellousgirgis:update-cms -m "Update CMS"
           rm -rf cms-test
+
+        env:
+            GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          shell: /usr/bin/bash -e {0}
