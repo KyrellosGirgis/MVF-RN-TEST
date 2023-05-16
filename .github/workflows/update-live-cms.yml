@@ -24,7 +24,7 @@ jobs:
           git clone https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/am-vodafone/cms-test cms-test
           rm -rf cms-test/CMS/*
           cp -R CMS/* cms-test/CMS/
-          cd cms_repo
+          cd cms-test
           git add -A
           git commit -m "Update CMS"
           git push origin HEAD:refs/heads/update-cms
