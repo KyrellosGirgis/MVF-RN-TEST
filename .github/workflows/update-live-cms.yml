@@ -21,12 +21,12 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "kyrellous.girgis@vodafone.com"
-          git clone https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/am-vodafone/cms-test cms_repo
-          rm -rf cms_repo/CMS/*
-          cp -R CMS/* cms_repo/CMS/
+          git clone https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/am-vodafone/cms-test cms-test
+          rm -rf cms-test/CMS/*
+          cp -R CMS/* cms-test/CMS/
           cd cms_repo
           git add -A
           git commit -m "Update CMS"
           git push origin HEAD:refs/heads/update-cms
           hub pull-request -b am-vodafone:main -h KyrellousGirgis:update-cms -m "Update CMS"
-          rm -rf cms_repo
+          rm -rf cms-test
