@@ -1,5 +1,6 @@
 {
   "deeplinkScreens": [
+    { "A Change in CMS": "Change" },
     {
       "screenId": "home",
       "deeplinkSchemes": [
