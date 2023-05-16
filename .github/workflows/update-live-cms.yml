@@ -38,5 +38,4 @@ jobs:
           rm -rf cms-test
 
         env:
-            GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-          shell: /usr/bin/bash -e {0}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
