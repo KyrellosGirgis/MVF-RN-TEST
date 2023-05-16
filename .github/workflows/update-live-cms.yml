@@ -21,7 +21,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "kyrellous.girgis@vodafone.com"
-          git clone https://${{ env.USERNAME }}:${{ env.TOKEN }}@https://github.com/am-vodafone/cms-test cms_repo
+          git clone https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/am-vodafone/cms-test cms_repo
           rm -rf cms_repo/CMS/*
           cp -R CMS/* cms_repo/CMS/
           cd cms_repo
