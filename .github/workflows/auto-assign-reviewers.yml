@@ -1,0 +1,53 @@
+# Script Steps :
+# -Retrieve list of changed files in the PR
+# -Identify the most 3 contributors in the changed files
+# -Assign the PR review to the contributors
+
+name: Assign PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  assign-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get modified files and assign review
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          REPO=${{ github.repository }}
+          # echo "PR number: ${PR_NUMBER}"
+          # echo "Repository: ${REPO}"
+
+          MODIFIED_FILES=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
+            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}/files")
+
+          # echo "Modified files: ${MODIFIED_FILES}"
+
+          REVIEWERS=""
+          for FILE in $(echo "${MODIFIED_FILES}" | jq -r '.[].filename'); do
+            COMMIT_AUTHORS=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
+              "https://api.github.com/repos/${REPO}/commits?path=${FILE}")
+            
+            #  echo "Commit authors for ${FILE}: ${COMMIT_AUTHORS}"
+            
+            for AUTHOR in $(echo "${COMMIT_AUTHORS}" | jq -r '.[].author.login'); do
+              REVIEWERS="${REVIEWERS} ${AUTHOR}"
+            done
+          done
+          REVIEWERS=$(echo "${REVIEWERS}" | sed 's/null//g')
+          UNIQUE_REVIEWERS=$(echo "${REVIEWERS}" | tr ' ' '\n' | sort | uniq -c | sort -rn | awk '{print $2}' | head -n 3 | tr '\n' ' ')
+          echo "Unique reviewers: ${UNIQUE_REVIEWERS}"
+
+          REVIEWERS_JSON=$(echo "${UNIQUE_REVIEWERS}" | jq -R 'split(" ") | map(select(. != "")) | {"reviewers":.}')
+          echo "Reviewers JSON: ${REVIEWERS_JSON}"
+          curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -X POST \
+            -d "${REVIEWERS_JSON}" \
+            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers"

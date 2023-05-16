@@ -1,0 +1,37 @@
+name: Update Live CMS
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  update_remote_cms:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update Live CMS
+        run: |
+          git clone https://github.com/am-vodafone/cms-test cms_repo
+          rm -rf cms_repo/CMS/*
+          cp -R CMS/* cms_repo/CMS/
+          cd cms_repo
+          git config user.name "GitHub Actions"
+          git config user.email "kyrellous.girgis@vodafone.com"
+          git add -A
+          git commit -m "Update CMS"
+          git push origin HEAD:refs/heads/update-cms
+          hub pull-request -b am-vodafone:main -h KyrellousGirgis:update-cms -m "Update CMS"
+          rm -rf cms_repo
+
