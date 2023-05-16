@@ -1,0 +1,30 @@
+diff --git a/node_modules/@vfgroup-oneplatform/login/Screens/AuthContainer/AuthContainer.js b/node_modules/@vfgroup-oneplatform/login/Screens/AuthContainer/AuthContainer.js
+index 0e288e8..cf36e3d 100644
+--- a/node_modules/@vfgroup-oneplatform/login/Screens/AuthContainer/AuthContainer.js
++++ b/node_modules/@vfgroup-oneplatform/login/Screens/AuthContainer/AuthContainer.js
+@@ -42,6 +42,7 @@ import BiometricPopup, { requiresLegacyAuthentication } from '../BiometricPopup'
+ 
+ import styles from './AuthContainer.Styles';
+ import Labels from './Labels';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const { width: screenWidth } = Dimensions.get('screen');
+ 
+@@ -325,7 +326,7 @@ class AuthContainer extends Component {
+           />
+           {withCloseButton && (
+             <View style={styles.closeButton}>
+-              <TouchableWithoutFeedback onPress={onClosePress}>
++              <TouchableWithoutFeedback onPress={onClosePress} testID={testID('authContainerCloseButton')}>
+                 <Icon name={loginImages.ic_close_white} type="image" size={30} />
+               </TouchableWithoutFeedback>
+             </View>
+@@ -411,7 +412,7 @@ class AuthContainer extends Component {
+                         testID={LoginTestKeys.codeVerifyAuthContainerTitle}
+                       />
+                     )}
+-                    {subTitle ? <VFText i18nKey={subTitle} style={styles.subTitle(theme)} /> : null}
++                    {subTitle ? <VFText i18nKey={subTitle} style={styles.subTitle(theme)} testKey={testID('authContainerSubtitle')}/> : null}
+                     {this.renderErrorBox(errorProps, theme)}
+                     {children}
+                   </>

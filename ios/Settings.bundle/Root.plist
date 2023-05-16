@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>StringsTable</key>
+	<string>Root</string>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>App Data</string>
+			<key>FooterText</key>
+			<string>Wenn die MeinVodafone App nicht ordnungsgemäß funktioniert, kann das Problem möglicherweise durch das Zurücksetzen der Daten behoben werden. Schalte diese Einstellung ein, erzwinge das Schließen der App und starte sie dann erneut.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Reset App</string>
+			<key>Key</key>
+			<string>shouldDeleteAppData</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+	</array>
+</dict>
+</plist>

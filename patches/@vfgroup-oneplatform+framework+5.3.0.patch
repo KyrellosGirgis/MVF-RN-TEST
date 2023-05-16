@@ -1,0 +1,1359 @@
+diff --git a/node_modules/@vfgroup-oneplatform/framework/AddOns/Components/AddOnsCard/AddOnsCard.js b/node_modules/@vfgroup-oneplatform/framework/AddOns/Components/AddOnsCard/AddOnsCard.js
+index 6a762ad..345ee62 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/AddOns/Components/AddOnsCard/AddOnsCard.js
++++ b/node_modules/@vfgroup-oneplatform/framework/AddOns/Components/AddOnsCard/AddOnsCard.js
+@@ -16,6 +16,7 @@ import { DateCurrencyFromatter } from '@vfgroup-oneplatform/foundation/Utils';
+ import FrameworkTestKeys from '../../../FrameworkTestKeys';
+ 
+ import styles from './AddOnsCard.Styles';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class AddonsCard extends Component {
+   renderCardBody = () => {
+@@ -31,6 +32,7 @@ class AddonsCard extends Component {
+         i18nKey={item?.subtext ?? 'addons_sub_text'}
+         placeHolders={[currencyTransformer(item.price, 0), item.duration]}
+         style={[styles.secondText, secondTextStyle]}
++        testKey={testID("addOnsItemSubTitle")}
+       />
+     );
+   };
+@@ -74,12 +76,14 @@ class AddonsCard extends Component {
+                 name={_icon}
+                 type="image"
+                 size={leftIconSize || 34}
++                testID={testID("addOnsItemIcon")}
+               />
+             </View>
+             <View style={styles.text}>
+               <VFText
+                 style={[styles.topText, topTextStyle]}
+                 i18nKey={item.name}
++                testKey={testID("addOnsItemTitle")}
+                 {...(omitLongText && { numberOfLines: 1 })}
+               />
+               {this.renderCardBody()}
+@@ -100,6 +104,7 @@ class AddonsCard extends Component {
+                   name={_images.ic_chevron_right_red}
+                   type="image"
+                   size={rightIconSize || 33}
++                  testID={testID("addOnsItemArrow")}
+                 />
+               </TouchableOpacity>
+             </View>
+diff --git a/node_modules/@vfgroup-oneplatform/framework/AddOns/Components/AddOnsInlineContent/AddOnsInlineContent.js b/node_modules/@vfgroup-oneplatform/framework/AddOns/Components/AddOnsInlineContent/AddOnsInlineContent.js
+index 977fb50..9ecc2f2 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/AddOns/Components/AddOnsInlineContent/AddOnsInlineContent.js
++++ b/node_modules/@vfgroup-oneplatform/framework/AddOns/Components/AddOnsInlineContent/AddOnsInlineContent.js
+@@ -8,7 +8,7 @@ import { VFButton, VFText, Icon } from '@vfgroup-oneplatform/foundation/Componen
+ import { withTheme, Types } from '@vfgroup-oneplatform/foundation/Components/Themes';
+ 
+ import styles from './AddOnsInlineContent.styles';
+-
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ const AddOnsInlineContent = ({
+   leftIcon,
+   title,
+@@ -41,24 +41,25 @@ const AddOnsInlineContent = ({
+   return (
+     <View style={[styles.container(theme), containerStyle]}>
+       <View style={[styles.mainContent, mainContentStyle]}>
+-        <Icon name={leftIcon} style={[styles.icon, iconStyle]} type="image" />
++        <Icon name={leftIcon} style={[styles.icon, iconStyle]} type="image" testID={testID("inlineItemLeftIcon")}/>
+         <View style={[styles.titleAndSubtitleContainer, titleAndSubtitleContainerStyle]}>
+-          <VFText i18nKey={title} style={[styles.title(theme), titleStyle]} />
+-          <VFText i18nKey={subtitle} style={[styles.subtitle(theme), subtitleStyle]} />
++          <VFText i18nKey={title} style={[styles.title(theme), titleStyle]} testKey={testID("inlineItemTitle")} />
++          <VFText i18nKey={subtitle} style={[styles.subtitle(theme), subtitleStyle]} testKey={testID("inlineItemSubTitle")} />
+         </View>
+         <View style={styles.rightIconContainer(theme)}>
+-          <Icon name={rightIcon} style={[styles.image, imageStyle]} type="image" />
++          <Icon name={rightIcon} style={[styles.image, imageStyle]} type="image" testID={testID("inlineItemRightIcon")}/>
+         </View>
+       </View>
+       <View style={[styles.separator(theme), separatorStyle]} />
+       <View style={[styles.descriptionAndButtonContainer, descriptionAndButtonContainerStyle]}>
+-        <VFText i18nKey={description} style={[styles.description(theme), descriptionStyle]} />
++        <VFText i18nKey={description} style={[styles.description(theme), descriptionStyle]} testKey={testID("inlineItemDesc")} />
+         <VFButton
+           title={buttonTitle}
+           onPress={() => onButtonPress(addOnData)}
+           style={[styles.button, buttonStyle]}
+           textStyle={[styles.buttonText, buttonTextStyle]}
+           type={Types.PRIMARY}
++          testKey={testID("inlineItemBtn")}
+         />
+       </View>
+     </View>
+diff --git a/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOnDetails/AddOnDetails.js b/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOnDetails/AddOnDetails.js
+index 71202bd..87b2909 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOnDetails/AddOnDetails.js
++++ b/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOnDetails/AddOnDetails.js
+@@ -20,6 +20,7 @@ import Row from '../../Components/Row';
+ 
+ import styles from './AddOnDetails.Styles';
+ import AddOnDetailsFixedFooter from './AddOnDetailsFixedFooter/AddOnDetailsFixedFooter';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers';
+ 
+ const CustomLayoutAnimation = {
+   duration: 150,
+@@ -108,7 +109,7 @@ function AddOnDetails({
+         showBack
+         onClose={onClose}
+         onBack={onBack}
+-        titleTextAccessibilityLabel={`${name}${FrameworkTestKeys.AddOnDetailsTitleId}`}
++        titleTextAccessibilityLabel={`${FrameworkTestKeys.AddOnDetailsTitleId}`}
+         testID={`${name}${FrameworkTestKeys.AddOnDetailsTitleId}`}
+         closeButtonAccessibilityLabel={`${name}${FrameworkTestKeys.AddOnDetailsCloseButtonLabel}`}
+         backButtonAccessibilityLabel={`${name}${FrameworkTestKeys.AddOnDetailsBackButtonLabel}`}
+@@ -127,10 +128,10 @@ function AddOnDetails({
+         <VFText
+           style={styles.headerText}
+           i18nKey={title}
+-          testKey={`${name}${FrameworkTestKeys.AddOnDetailsSubtitleLabel}`}
++          testKey={`${FrameworkTestKeys.AddOnDetailsSubtitleLabel}`}
+         />
+ 
+-        <Text style={styles.priceContainer}>
++        <Text style={styles.priceContainer} testID={testID('addOnsDetailsAmountValue')}>
+           <VFText i18nKey={`${price}${unit}`} style={styles.priceValue} />
+           <VFText i18nKey=" " style={styles.priceValue} />
+           <VFText
+@@ -142,7 +143,7 @@ function AddOnDetails({
+         {_isFunction(renderContentBeforeDescription) ? renderContentBeforeDescription() : null}
+         <View
+           style={styles.description}
+-          testID={`${name}${FrameworkTestKeys.AddOnDetailsDescription}`}
++          testID={`${FrameworkTestKeys.AddOnDetailsDescription}`}
+         >
+           <VFShowMoreText
+             text={description}
+@@ -167,17 +168,19 @@ function AddOnDetails({
+               mode === 'Remove' ? 'manage_addon_remove_date_title' : 'manage_addon_buy_date_title'
+             }
+             style={styles.recordText}
++            testKey={testID('addOnsDetailsDateText')}
+           />
+           <VFText
+             i18nKey={mode === 'Remove' ? expirationDate : startingDate}
+             style={styles.recordText}
++            testKey={testID('addOnsDetailsDate')}
+           />
+         </Row>
+ 
+         {withAutoRenewable && (
+           <Row>
+-            <VFText i18nKey="manage_addon_renew_title" style={styles.recordText} />
+-            <Toggle onChange={onToggleAutoRenew} initialValue={isAutoRenewable} />
++            <VFText i18nKey="manage_addon_renew_title" style={styles.recordText} testKey={testID('addOnsDetailsrReNewToggleText')}/>
++            <Toggle onChange={onToggleAutoRenew} initialValue={isAutoRenewable} testID={testID('addOnsDetailsrReNewToggle')}/>
+           </Row>
+         )}
+         {_isFunction(renderFooter) && renderFooter()}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOns/AddOns.js b/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOns/AddOns.js
+index 4b10a22..61ad257 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOns/AddOns.js
++++ b/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOns/AddOns.js
+@@ -21,6 +21,7 @@ import AddOnsLoading from '../AddOnsLoading';
+ import Timeline from '../Timeline';
+ 
+ import styles from './AddOns.Styles';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class AddOns extends Component {
+   constructor(props) {
+@@ -208,6 +209,10 @@ class AddOns extends Component {
+           iconName={errorIconName}
+           iconButtonName={tryAgainIconName}
+           onPress={onTryAgainPress}
++          descAccessibilityLabel={testID("ErrorDescription")} 
++          iconAccessibilityLabel={testID("ErrorIcon")} 
++          tryAgainAccessibilityLabel={testID("ErrorTryAgainText")} 
++          arrowAccessibilityLabel={testID("ErrorTryAgainIcon")} 
+         />
+       </View>
+     ) : (
+@@ -230,6 +235,7 @@ class AddOns extends Component {
+         <SectionHeader
+           theme={theme}
+           title={sectionHeaderTitle}
++          titleAccessbilityLabel={testID("addOnsTitle")}
+           style={styles.sectionHeader(isTimeLineView)}
+           {...(!withCategories && subtitleProp)}
+           titleStyle={headerSubTitleStyle}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOnsShop/AddOnsShop.js b/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOnsShop/AddOnsShop.js
+index 9dc273f..1320817 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOnsShop/AddOnsShop.js
++++ b/node_modules/@vfgroup-oneplatform/framework/AddOns/Containers/AddOnsShop/AddOnsShop.js
+@@ -23,6 +23,7 @@ import AddOnsList from '../../Components/AddOnsList';
+ import AddonsShopLoading from '../AddOnsShopLoading';
+ 
+ import styles from './AddOnsShop.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class AddOnsShop extends Component {
+   constructor(props) {
+@@ -156,7 +157,7 @@ class AddOnsShop extends Component {
+           subtitle={!isError && 'shop_addons_subtitle'}
+           titleStyle={titleStyle}
+           subtitleStyle={subTitleStyle}
+-          titleAccessbilityLabel={'Shop Add-ons title'}
++          titleAccessbilityLabel={testID('Shop Add-ons title')}
+         />
+         {withCategories && !isError && (
+           <FilterBar
+@@ -174,6 +175,10 @@ class AddOnsShop extends Component {
+             onPress={onTryAgainPress}
+             backgroundStyle={styles.errorContainer}
+             iconStyle={styles.errorIcon}
++            descAccessibilityLabel={testID("ErrorDescription")} 
++            iconAccessibilityLabel={testID("ErrorIcon")} 
++            tryAgainAccessibilityLabel={testID("ErrorTryAgainText")} 
++            arrowAccessibilityLabel={testID("ErrorTryAgainIcon")} 
+           />
+         ) : (
+           withDivider && (
+diff --git a/node_modules/@vfgroup-oneplatform/framework/AddOns/Screens/AddOnsShopScreen/AddOnsShopScreen.js b/node_modules/@vfgroup-oneplatform/framework/AddOns/Screens/AddOnsShopScreen/AddOnsShopScreen.js
+index 954ee89..05262a7 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/AddOns/Screens/AddOnsShopScreen/AddOnsShopScreen.js
++++ b/node_modules/@vfgroup-oneplatform/framework/AddOns/Screens/AddOnsShopScreen/AddOnsShopScreen.js
+@@ -7,6 +7,7 @@ import { withTheme, LightThemeColors } from '@vfgroup-oneplatform/foundation/Com
+ 
+ import FrameworkTestKeys from '../../../FrameworkTestKeys';
+ import AddOnsShop from '../../Containers/AddOnsShop';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers';
+ 
+ class AddOnsShopScreen extends Component {
+   constructor(props) {
+@@ -22,6 +23,8 @@ class AddOnsShopScreen extends Component {
+         showBack
+         onClose={onClose}
+         closeButtonTestID={FrameworkTestKeys.AddOnsShopScreenClose}
++        backButtonTestID={testID("addOnsFilterBackBtn")}
++        titleTextHeaderAccessibilityLabel={testID("addOnsFilterHeader")}
+         withHeaderSpace
+       >
+         <AddOnsShop {...this.props} />
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Address/Components/AddressCard/AddressCard.js b/node_modules/@vfgroup-oneplatform/framework/Address/Components/AddressCard/AddressCard.js
+index 6ae6ece..04529e8 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Address/Components/AddressCard/AddressCard.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Address/Components/AddressCard/AddressCard.js
+@@ -13,6 +13,7 @@ import { getThemeImages } from '../../../Themes';
+ 
+ import styles from './AddressCard.styles';
+ import { addressCardLoadingConfig } from './AddressCardLoading/AddressCardLoading.config';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class AddressCard extends Component {
+   render() {
+@@ -51,7 +52,7 @@ class AddressCard extends Component {
+           type={'quaternary'}
+           onPress={() => onChangeAddressPress(addressData)}
+           testKey={FrameworkTestKeys.ChangeAddressButton}
+-          textAccessibilityLabel="ChangeAddressButton"
++          textAccessibilityLabel={testID("ChangeAddressButton")}
+         />
+       );
+     }
+@@ -62,13 +63,14 @@ class AddressCard extends Component {
+         <>
+           <View style={styles.addressCardBody}>
+             <View style={styles.addressIcon}>
+-              <Icon name={addressIcon ?? iconName} type={'image'} />
++              <Icon name={addressIcon ?? iconName} type={'image'} testID={testID("AddressCardIcon")} />
+             </View>
+             <View style={styles.addressDetails}>
+               {!hideAddressName && (
+                 <VFText
+                   style={styles.addressCardTitle(theme)}
+                   i18nKey={addressName ?? 'my_address_correspondence_title'}
++                  testID={testID("AddressCardTitle")}
+                 />
+               )}
+               <VFText
+@@ -86,7 +88,7 @@ class AddressCard extends Component {
+     }
+ 
+     return (
+-      <View style={styles.addressCard(theme)}>
++      <View style={styles.addressCard(theme)}  testID={testID("AddressCard")}>
+         {isLoading ? renderLoading() : renderComponent()}
+       </View>
+     );
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Address/Containers/Address/Address.js b/node_modules/@vfgroup-oneplatform/framework/Address/Containers/Address/Address.js
+index e006850..22e97e3 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Address/Containers/Address/Address.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Address/Containers/Address/Address.js
+@@ -11,6 +11,7 @@ import { withTheme } from '@vfgroup-oneplatform/foundation/Components/Themes';
+ import AddressCard from '../../Components/AddressCard';
+ 
+ import styles from './Address.styles';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class Address extends Component {
+   render() {
+@@ -25,7 +26,7 @@ class Address extends Component {
+           subtitle="my_address_current_subtitle"
+           titleStyle={addressTitleStyle}
+           subtitleStyle={addressSubtitleStyle}
+-          titleAccessbilityLabel={'currentAddresTitle'}
++          titleAccessbilityLabel={testID('currentAddresTitle')}
+         />
+         {_isArray(addressData) && addressData.length ? (
+           <FlatList
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Address/Containers/ChangeAddress/ChangeAddress.js b/node_modules/@vfgroup-oneplatform/framework/Address/Containers/ChangeAddress/ChangeAddress.js
+index 7d1f039..a7d091b 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Address/Containers/ChangeAddress/ChangeAddress.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Address/Containers/ChangeAddress/ChangeAddress.js
+@@ -24,6 +24,7 @@ import FrameworkTestKeys from '../../../FrameworkTestKeys';
+ import ChangeAddressForm from '../../Components/ChangeAddressForm';
+ 
+ import styles from './ChangeAddress.Styles';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class ChangeAddress extends Component {
+   constructor(props) {
+@@ -190,6 +191,8 @@ class ChangeAddress extends Component {
+           containerStyle={styles.modalContent}
+           headerStyle={styles.modalHeader}
+           isCloseButton={!isChangeAddressSuccess}
++          TitleAccessibilityLabel={testID("changeAddressModelHeader")}
++          testID={testID("changeAddressModel")}
+         >
+           {isChangeAddressSuccess ? (
+             <VFLottieView
+@@ -198,6 +201,7 @@ class ChangeAddress extends Component {
+               loop={false}
+               lottieViewStyle={styles.iconContainer}
+               type={LottieTypes.tick}
++              lottieViewTestID={testID("changeAddressSuccessModelImage")}
+             />
+           ) : (
+             <View style={styles.modalIconContainer}>
+@@ -205,6 +209,7 @@ class ChangeAddress extends Component {
+                 name={Images.ic_WarningHiLight_Theme}
+                 type="image"
+                 style={styles.iconContainer}
++                testID={testID("changeAddressErrorModelImage")} 
+               />
+             </View>
+           )}
+@@ -224,6 +229,7 @@ class ChangeAddress extends Component {
+                 : 'change_address_modal_failure_subtitle'
+             }
+             style={styles.modalDescription}
++            testID={testID("changeAddressModelDesc")}
+           />
+           <VFButton
+             title={
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Address/Screens/AddressScreen/AddressScreen.js b/node_modules/@vfgroup-oneplatform/framework/Address/Screens/AddressScreen/AddressScreen.js
+index 4b2b479..99d096f 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Address/Screens/AddressScreen/AddressScreen.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Address/Screens/AddressScreen/AddressScreen.js
+@@ -8,6 +8,7 @@ import { withTheme } from '@vfgroup-oneplatform/foundation/Components/Themes';
+ 
+ import FrameworkTestKeys from '../../../FrameworkTestKeys';
+ import Address from '../../Containers/Address';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class AddressScreen extends Component {
+   render() {
+@@ -18,6 +19,7 @@ class AddressScreen extends Component {
+         title={'my_address_screen_title'}
+         onClose={onClose}
+         closeButtonTestID={FrameworkTestKeys.AddressScreenCloseButton}
++        titleTextAccessibilityLabel={testID("myAddressesHeader")}
+       >
+         <Address {...this.props} />
+       </VFScreen>
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Address/Screens/ChangeAddressScreen/ChangeAddressScreen.js b/node_modules/@vfgroup-oneplatform/framework/Address/Screens/ChangeAddressScreen/ChangeAddressScreen.js
+index dd84f7f..1025e6a 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Address/Screens/ChangeAddressScreen/ChangeAddressScreen.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Address/Screens/ChangeAddressScreen/ChangeAddressScreen.js
+@@ -8,6 +8,7 @@ import { LightThemeColors, withTheme } from '@vfgroup-oneplatform/foundation/Com
+ 
+ import FrameworkTestKeys from '../../../FrameworkTestKeys';
+ import ChangeAddress from '../../Containers/ChangeAddress';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ function ChangeAddressScreen({
+   onClose,
+@@ -29,6 +30,8 @@ function ChangeAddressScreen({
+       onBack={onBack}
+       onClose={onClose}
+       closeButtonTestID={FrameworkTestKeys.CloseButtonMyAddress}
++      titleTextHeaderAccessibilityLabel={testID("changeAddressHeader")}
++      backButtonTestID={testID("backButton")}
+     >
+       <StatusBar backgroundColor="transparent" />
+       <ChangeAddress
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Balance/Components/AutoTopUpCard/AutoTopUpCard.js b/node_modules/@vfgroup-oneplatform/framework/Balance/Components/AutoTopUpCard/AutoTopUpCard.js
+index 1160020..c84967a 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Balance/Components/AutoTopUpCard/AutoTopUpCard.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Balance/Components/AutoTopUpCard/AutoTopUpCard.js
+@@ -15,6 +15,7 @@ import { LightThemeColors, withTheme } from '@vfgroup-oneplatform/foundation/Com
+ import { Images } from '../../../Themes';
+ 
+ import styles from './AutoTopUpCard.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const getStatusDotImage = isActive => {
+   if (isActive) {
+@@ -42,8 +43,9 @@ function AutoTopUpCard({
+             name={getStatusDotImage(isAutoTopUpActivated)}
+             size={17}
+             style={styles.statusDotStyle}
++            testID={testID('registeredAutoTopup_Icon')}
+           />
+-          <VFText i18nKey={title} style={styles.title} type="primary" />
++          <VFText i18nKey={title} style={styles.title} type="primary"  testKey={testID('registeredAutoTopup_title')}/>
+         </View>
+         <Toggle
+           size="small"
+@@ -51,9 +53,10 @@ function AutoTopUpCard({
+           initialValue={isAutoTopUpActivated}
+           selected={isAutoTopUpActivated}
+           onChange={onToggleActiveStatus}
++          testID={testID('registeredAutoTopup_toggle')}
+         />
+       </View>
+-      <VFText i18nKey={description} style={styles.description(isAutoTopUpActivated)} />
++      <VFText i18nKey={description} style={styles.description(isAutoTopUpActivated)} testKey={testID('registeredAutoTopup_body')}/>
+       <View style={styles.buttonsContainer}>
+         <VFButton
+           style={styles.buttonStyle}
+@@ -61,6 +64,7 @@ function AutoTopUpCard({
+           title={buttonTitle}
+           onPress={onButtonPress}
+           type="secondary"
++          testKey={testID('registeredAutoTopup_btn')}
+         />
+       </View>
+     </View>
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Balance/Screens/Balance/Balance.js b/node_modules/@vfgroup-oneplatform/framework/Balance/Screens/Balance/Balance.js
+index 37bc7be..558b19a 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Balance/Screens/Balance/Balance.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Balance/Screens/Balance/Balance.js
+@@ -28,6 +28,7 @@ import {
+ import NoBalaceHistory from '../NoBalanceHistory/NoBalanceHistory';
+ 
+ import styles from './Balance.Styles';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class Balance extends Component {
+   constructor(props) {
+@@ -240,6 +241,10 @@ class Balance extends Component {
+         textButton="balance_screen_try_again"
+         iconStyle={styles.errorIconStyle}
+         onPress={onTryAgainPress}
++        iconAccessibilityLabel={testID('icon_of_failedServices_screen')}
++        descAccessibilityLabel={testID('mesage_error_text')}
++        tryAgainAccessibilityLabel={testID('try_again_text')}
++        arrowAccessibilityLabel={testID('refresh_icon_failedService')}
+       />
+     ) : null;
+ 
+@@ -365,6 +370,8 @@ class Balance extends Component {
+           rightText="balance_screen_date_filter_title"
+           rightIcon={frameworkImages.icCalendarRed}
+           onRightSectionPress={this.handleBalanceHistoryDatesPress}
++          titleAccessbilityLabel={testID('topupHistorytitle')}
++
+         />
+ 
+         {this.state.hasDatesFilter && (
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Balance/Screens/BalanceDateFilter/BalanceDateFilter.js b/node_modules/@vfgroup-oneplatform/framework/Balance/Screens/BalanceDateFilter/BalanceDateFilter.js
+index d666804..ef83441 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Balance/Screens/BalanceDateFilter/BalanceDateFilter.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Balance/Screens/BalanceDateFilter/BalanceDateFilter.js
+@@ -20,6 +20,7 @@ import { CustomDay } from '../../Components';
+ 
+ import styles from './BalanceDateFilter.styles';
+ import './calendarLocaleConfig';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const { dateFormats, dateTransformer } = DateCurrencyFromatter.dateCurrencyFromatter;
+ 
+@@ -188,6 +189,7 @@ class BalanceDateFilter extends Component {
+         style={styles.container}
+         title="balance_date_filter_screen_title"
+         subtitle="balance_date_filter_screen_subtitle"
++        titleAccessbilityLabel={testID('balanceHistoryTitle')}
+       />
+     );
+   };
+@@ -251,13 +253,14 @@ class BalanceDateFilter extends Component {
+ 
+     return (
+       <View style={styles.selectedContainer(!!selectedPeriodText)}>
+-        <VFText style={styles.selectedTitle} i18nKey="balance_date_filter_screen_selected_period" />
++        <VFText style={styles.selectedTitle} i18nKey="balance_date_filter_screen_selected_period" testKey={testID('selectedPeriodTitle')}/>
+         <VFText
+           style={styles.selectedValue}
+           localize={false}
+           // `DUMMY` is needed as placeholder text space, is doesn't get
+           // displayed when `selectedPeriodText` is `undefined`
+           i18nKey={selectedPeriodText ?? 'DUMMY'}
++          testKey={testID('selectedPeriod')}
+         />
+       </View>
+     );
+@@ -276,6 +279,7 @@ class BalanceDateFilter extends Component {
+           title="balance_date_filter_screen_view_history"
+           disabled={!dateOne && !dateTwo}
+           onPress={() => onViewHistory(this.getPeriodParam(dateOne, dateTwo))}
++          testKey={testID('viewHistoryButton')} 
+         />
+       </>
+     );
+@@ -287,11 +291,13 @@ class BalanceDateFilter extends Component {
+         title="balance_history_title"
+         onClose={this.props.onClose}
+         clearStatusBarEntries={false}
++        closeButtonTestID={testID('balanceHistoryCloseBtn')}
++        titleTextAccessibilityLabel={testID('balanceHistoryHeader')}
+       >
+         <ScrollView>
+           {this.renderSectionHeader()}
+ 
+-          <View style={styles.calendarContainer(this.props.theme)}>
++          <View style={styles.calendarContainer(this.props.theme)} testID={testID('balanceCalendar')}>
+             {this.renderCalendar()}
+ 
+             {this.renderSelectedPeriod()}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/ChangePassword/ChangePassword.js b/node_modules/@vfgroup-oneplatform/framework/ChangePassword/ChangePassword.js
+index 8027cda..d0f290f 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/ChangePassword/ChangePassword.js
++++ b/node_modules/@vfgroup-oneplatform/framework/ChangePassword/ChangePassword.js
+@@ -19,6 +19,7 @@ import FrameworkTestKeys from '../FrameworkTestKeys';
+ 
+ import styles from './ChangePassword.styles';
+ import { SuccessModal, FailureModal } from './Components';
++import { testID } from '../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const validationStatuses = Object.freeze({
+   NOT_ENTERED: undefined,
+@@ -254,6 +255,8 @@ class ChangePassword extends Component {
+         title={'change_password_title'}
+         onClose={onClosePress}
+         closeButtonTestID={FrameworkTestKeys.ChangePasswordCloseIcon}
++        titleTextHeaderAccessibilityLabel={testID('ChangePwTitleBar')}
++
+       >
+         <SpinnerOverlay
+           isVisible={isLoading}
+@@ -286,6 +289,7 @@ class ChangePassword extends Component {
+                 containerStyle={styles.inputContainerStyle}
+                 baseColor={theme.colors.textInput.default.baseColor}
+                 tintColor={theme.colors.textInput.default.tintColor}
++                rigthIconTestID={testID('CurrentshowPwBtn')}
+               />
+               <VFText
+                 i18nKey={'change_password_new_password_title'}
+@@ -316,6 +320,7 @@ class ChangePassword extends Component {
+                     ? theme.colors.textInput.error.tintColor
+                     : theme.colors.textInput.default.tintColor
+                 }
++                rigthIconTestID={testID('NewshowPwBtn')}
+               />
+               <PasswordInput
+                 testID={FrameworkTestKeys.ConfirmPasswordID}
+@@ -342,6 +347,7 @@ class ChangePassword extends Component {
+                     ? theme.colors.textInput.error.tintColor
+                     : theme.colors.textInput.default.tintColor
+                 }
++                rigthIconTestID={testID('ConfirmshowPwBtn')}
+               />
+               <View style={styles.sectionSeparator(theme)} />
+               <VFButton
+@@ -384,6 +390,7 @@ class ChangePassword extends Component {
+             backdropTransitionOutTiming={0} // fix bug of screen flicker on close modal
+             mainViewAccessibilityLabel={FrameworkTestKeys.FailureModal}
+             quickActionMenuCloseIconTestID={FrameworkTestKeys.CloseIcon}
++            TitleAccessibilityLabel={testID('ChangePwErrorTrayTitle')}
+           />
+         )}
+       </VFScreen>
+diff --git a/node_modules/@vfgroup-oneplatform/framework/ChangePassword/Components/FailureModal/FailureModal.js b/node_modules/@vfgroup-oneplatform/framework/ChangePassword/Components/FailureModal/FailureModal.js
+index 8816b3b..b12a9db 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/ChangePassword/Components/FailureModal/FailureModal.js
++++ b/node_modules/@vfgroup-oneplatform/framework/ChangePassword/Components/FailureModal/FailureModal.js
+@@ -14,6 +14,7 @@ import { Types } from '@vfgroup-oneplatform/foundation/Components/Themes';
+ import FrameworkTestKeys from '../../../FrameworkTestKeys';
+ 
+ import styles from './FailureModal.styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers';
+ 
+ const FailureModal = ({
+   isVisible,
+@@ -40,10 +41,10 @@ const FailureModal = ({
+       {...modalProps}
+     >
+       <View style={styles.modalIconContainer}>
+-        <Icon name={image} type="image" style={styles.iconContainer} />
++        <Icon name={image} type="image" style={styles.iconContainer} testID={testID('ChangePwErrorTrayIcon')}/>
+       </View>
+-      <VFText i18nKey={message} style={styles.modalMessage} />
+-      <VFText i18nKey={description} style={styles.modalDescription} />
++      <VFText i18nKey={message} style={styles.modalMessage} testKey={testID('ChangePwErrorTraySubTitle')}/>
++      <VFText i18nKey={description} style={styles.modalDescription} testKey={testID('ChangePwErrorTrayBody')}/>
+       <VFButton
+         title={buttonText}
+         onPress={onButtonPress}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/ChangePassword/Components/SuccessModal/SuccessModal.js b/node_modules/@vfgroup-oneplatform/framework/ChangePassword/Components/SuccessModal/SuccessModal.js
+index 93f521b..e2818a6 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/ChangePassword/Components/SuccessModal/SuccessModal.js
++++ b/node_modules/@vfgroup-oneplatform/framework/ChangePassword/Components/SuccessModal/SuccessModal.js
+@@ -7,6 +7,7 @@ import { Types } from '@vfgroup-oneplatform/foundation/Components/Themes';
+ import VFLottieView from '@vfgroup-oneplatform/foundation/Components/VFLottieView';
+ 
+ import styles from './SuccessModal.styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const SuccessModal = ({
+   isVisible,
+@@ -29,6 +30,7 @@ const SuccessModal = ({
+       containerStyle={styles.modalContent}
+       headerStyle={styles.modalHeader}
+       withCloseButton={withCloseButton}
++      TitleAccessibilityLabel={testID('ChangePwConfirmTrayTitle')}
+     >
+       <VFLottieView
+         autoPlay
+@@ -36,14 +38,16 @@ const SuccessModal = ({
+         loop={false}
+         lottieViewStyle={styles.iconContainer}
+         type={lottieType}
++        lottieViewTestID={testID('ChangePwConfirmTrayIcon')}
+       />
+-      <VFText i18nKey={message} style={styles.modalMessage} />
+-      <VFText i18nKey={description} style={styles.modalDescription} />
++      <VFText i18nKey={message} style={styles.modalMessage}  testKey={testID('ChangePwConfirmTraySubTitle')}/>
++      <VFText i18nKey={description} style={styles.modalDescription} testKey={testID('ChangePwConfirmTrayBody')}/>
+       <VFButton
+         title={buttonText}
+         onPress={onButtonPress}
+         style={styles.modalButton}
+         textStyle={styles.modalButtonText}
++        textAccessibilityLabel={testID('GoToDashboard')}
+       />
+     </QuickActionMenu>
+   );
+diff --git a/node_modules/@vfgroup-oneplatform/framework/CommonUI/PermissionsItem/PermissionsItem.js b/node_modules/@vfgroup-oneplatform/framework/CommonUI/PermissionsItem/PermissionsItem.js
+index 9ead238..8705176 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/CommonUI/PermissionsItem/PermissionsItem.js
++++ b/node_modules/@vfgroup-oneplatform/framework/CommonUI/PermissionsItem/PermissionsItem.js
+@@ -16,6 +16,7 @@ import FrameworkTestKeys from '../../FrameworkTestKeys';
+ import { getThemeImages } from '../../Themes';
+ 
+ import styles from './PermissionsItem.Styles';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class PermissionsItem extends Component {
+   static getDerivedStateFromProps(props, oldState) {
+@@ -83,8 +84,8 @@ class PermissionsItem extends Component {
+           type="image"
+           name={images[this.props.icon]}
+           size={this.props.iconSize || 34}
+-          accessibilityLabel={FrameworkTestKeys.permissionsItemIcon}
+-          testID={FrameworkTestKeys.permissionsItemIcon}
++          accessibilityLabel={`${FrameworkTestKeys.permissionsItemIcon}${this.props.title}`}
++          testID={`${FrameworkTestKeys.permissionsItemIcon}${this.props.title}`}
+         />
+       )
+     );
+@@ -97,12 +98,14 @@ class PermissionsItem extends Component {
+       <VFText
+         style={[styles.title, titleStyle]}
+         i18nKey={this.props.title}
+-        testKey={FrameworkTestKeys.permissionsItemTitle}
++        testKey={`${FrameworkTestKeys.permissionsItemTitle}${this.props.title}`}
+       />
+     );
+   };
+ 
+   renderRightComponent = isToggleAsText => {
++    const { title } = this.props
++    const accessibilityLabel = `OB${title}ToggleAsText`
+     return isToggleAsText ? (
+       <VFText
+         style={styles.toggleAsText(this.props.theme)}
+@@ -111,7 +114,7 @@ class PermissionsItem extends Component {
+             ? 'app_permissions_status_blocked'
+             : 'app_permissions_status_granted'
+         }
+-        testKey={FrameworkTestKeys.permessionsItemToggleText}
++        testKey={testID(accessibilityLabel)}
+       />
+     ) : (
+       this.renderToggle(Platform.OS === 'android')
+@@ -131,7 +134,7 @@ class PermissionsItem extends Component {
+         onValueChange={this.onToggleChange}
+         trackColor={androidTrackColor}
+         thumbColor={androidThumbColor}
+-        testID={FrameworkTestKeys.permissionsItemSwitch}
++        testID={`${FrameworkTestKeys.permissionsItemSwitch}${this.props.title}`}
+       />
+     ) : (
+       <Toggle
+@@ -140,7 +143,7 @@ class PermissionsItem extends Component {
+         onChange={this.onToggleChange}
+         inactiveContainerStyle={styles.toggle}
+         accessibilityLabel={FrameworkTestKeys.permissionsItemToggle}
+-        testID={FrameworkTestKeys.permissionsItemToggle}
++        testID={`${FrameworkTestKeys.permissionsItemToggle}${this.props.title}`}
+       />
+     );
+   };
+@@ -153,7 +156,7 @@ class PermissionsItem extends Component {
+         <VFText
+           style={[styles.description(theme), this.props.descriptionStyle]}
+           i18nKey={this.props.description}
+-          testKey={FrameworkTestKeys.permissionsItemDescription}
++          testKey={`${FrameworkTestKeys.permissionsItemDescription}${this.props.title}`}
+         />
+       )
+     );
+diff --git a/node_modules/@vfgroup-oneplatform/framework/CommonUI/WebView/WebView.js b/node_modules/@vfgroup-oneplatform/framework/CommonUI/WebView/WebView.js
+index f4c82d5..4447e9d 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/CommonUI/WebView/WebView.js
++++ b/node_modules/@vfgroup-oneplatform/framework/CommonUI/WebView/WebView.js
+@@ -14,6 +14,7 @@ import FrameworkTestKeys from '../../FrameworkTestKeys';
+ import { WebViewTrackingManager } from '../../Utils/TrackingManagers';
+ 
+ import styles from './WebView.Styles';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ function setUpRef(webViewRef, forwardedRef) {
+   if (_isFunction(forwardedRef)) {
+@@ -124,7 +125,7 @@ const WebView = forwardRef(
+               {_isFunction(renderHeaderTitle) ? (
+                 renderHeaderTitle(_navState.current, theme)
+               ) : (
+-                <VFText style={styles.textHeader} i18nKey={title} numberOfLines={1} />
++                <VFText style={styles.textHeader} i18nKey={title} numberOfLines={1} testKey={testID("webViewTitle")} />
+               )}
+               <TouchableOpacity
+                 style={styles.touchableClose}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/DashboardContainer/DashboardContainer.js b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/DashboardContainer/DashboardContainer.js
+index 85cdb02..66f12dd 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/DashboardContainer/DashboardContainer.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/DashboardContainer/DashboardContainer.js
+@@ -24,6 +24,7 @@ import Dashboard from '../Dashboard/Dashboard';
+ import DashboardDiscover from '../DashboardDiscover/DashboardDiscover';
+ 
+ import styles from './DashboardContainer.styles';
++import ContentManager from '@vfgroup-oneplatform/foundation/ContentManager';
+ 
+ class DashboardContainer extends Component {
+   constructor(props) {
+@@ -150,6 +151,8 @@ class DashboardContainer extends Component {
+     const { isLoadingDiscover } = handleIsLoading(this.props.isLoading);
+ 
+     if (item.type === 'group') {
++      const name = _.lowerCase(ContentManager.translate(item.name).split(' ')[0]);
++      const formatedName = `DB${name}`;
+       return (
+         <GroupCard
+           ref={comp => {
+@@ -161,16 +164,10 @@ class DashboardContainer extends Component {
+           items={item.subItems}
+           onPressDiscoverListItem={this.props.onPressDiscoverListItem}
+           images={this.props.images}
+-          viewAccessibilityLabel={`${item.name}${FrameworkTestKeys.DashboardContainerView}`}
+-          listTitleAccessibilityLabel={
+-            item.titleAccessibilityLabel ||
+-            `${item.name}${FrameworkTestKeys.DashboardContainerTitle}`
+-          }
+-          itemsAccessibilityLabel={
+-            item.listAccessibilityLabel ||
+-            `${item.name}${FrameworkTestKeys.DashboardContainerSection}`
+-          }
+-          itemName={item.name}
++          viewAccessibilityLabel={`${formatedName}View`}
++          listTitleAccessibilityLabel={item.titleAccessibilityLabel || `${formatedName}Title`}
++          itemsAccessibilityLabel={item.listAccessibilityLabel || `${formatedName}Section`}
++          itemName={formatedName}
+           headerStyle={this.props.groupHeaderStyle}
+         />
+       );
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/components/GroupCard/GroupCard.js b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/components/GroupCard/GroupCard.js
+index 5eaf03d..c444055 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/components/GroupCard/GroupCard.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/components/GroupCard/GroupCard.js
+@@ -10,6 +10,9 @@ import FrameworkTestKeys from '../../../../FrameworkTestKeys';
+ import List from '../List';
+ 
+ import styles from './GroupCard.styles';
++import { split as _split, capitalize as _capitalize, replace as _replace } from 'lodash';
++import ContentManager from '@vfgroup-oneplatform/foundation/ContentManager';
++import {testID} from '../../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class GroupCard extends Component {
+   onListItemPress = item => {
+@@ -17,19 +20,20 @@ class GroupCard extends Component {
+   };
+ 
+   mapItems = (items = []) => {
++    const { itemName } = this.props;
+     return items.map(item => {
+       item.onPress = () => this.onListItemPress({ ...item });
+       item.leftIconType = IconTypes.image;
+       item.leftIconName = item.extraInfo.icon;
+       item.title = item.extraInfo.title;
+ 
+-      item.itemAccessibilityLabel = item.containerAccessibilityLabel || FrameworkTestKeys.GroupCard;
+-      item.itemIconAccessibilityLabel =
+-        item.leftIconAccessibilityLabel || FrameworkTestKeys.GroupCardIcon;
+-      item.itemTitleAccessibilityLabel =
+-        item.titleAccessibilityLabel || FrameworkTestKeys.GroupCardTxt;
+-      item.itemRightIconAccessibilityLabel =
+-        item.rightIconAccessibilityLabel || FrameworkTestKeys.GroupCardArrow;
++      const formatedTitle = _capitalize(
++           _replace(_split(ContentManager.translate(item.title), ' ')[0], '-', ''),
++         );
++      item.itemAccessibilityLabel = testID(item.containerAccessibilityLabel || `${itemName}${formatedTitle}`);
++      item.itemIconAccessibilityLabel = testID(item.leftIconAccessibilityLabel || `${itemName}${formatedTitle}Icon`);
++      item.itemTitleAccessibilityLabel = testID(item.titleAccessibilityLabel || `${itemName}${formatedTitle}Txt`)
++      item.itemRightIconAccessibilityLabel = testID(item.rightIconAccessibilityLabel || `${itemName}${formatedTitle}Arrow`)
+ 
+       item.leftIconSize = 24;
+       item.showRightIcon = true;
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/components/ListItem/ListItem.js b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/components/ListItem/ListItem.js
+index e3cad5d..0266e43 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/components/ListItem/ListItem.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Dashboard/components/ListItem/ListItem.js
+@@ -17,6 +17,7 @@ import { colorPropType } from '@vfgroup-oneplatform/foundation/Utils/PropTypesVa
+ import FrameworkTestKeys from '../../../../FrameworkTestKeys';
+ 
+ import styles from './ListItem.styles';
++import { testID } from '../../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const ListItem = ({
+   title,
+@@ -59,7 +60,7 @@ const ListItem = ({
+       disabled={!isClickable}
+       style={[styles.itemContainerStyle, containerStyle]}
+       accessibilityLabel={itemAccessibilityLabel}
+-      testID={itemAccessibilityLabel}
++      testID={testID(itemAccessibilityLabel)}
+       accessible={false}
+       {...props}
+     >
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/CustomSubTrayItemView/CustomSubTrayItemView.js b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/CustomSubTrayItemView/CustomSubTrayItemView.js
+index ae23af5..d372178 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/CustomSubTrayItemView/CustomSubTrayItemView.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/CustomSubTrayItemView/CustomSubTrayItemView.js
+@@ -13,7 +13,7 @@ const CustomSubTrayItemView = ({ accessibilityLabel, onPress, children }) => {
+       accessibilityLabel={accessibilityLabel}
+       onPress={onPress}
+       accessible={false}
+-      testID={FrameworkTestKeys.customSubTrayItemViewTWF}
++      testID={accessibilityLabel}
+     >
+       <View style={styles.containerStyle} testID={FrameworkTestKeys.customSubTrayItemView}>
+         {children}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/Modal/Modal.js b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/Modal/Modal.js
+index 1410b9c..06bedf5 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/Modal/Modal.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/Modal/Modal.js
+@@ -14,6 +14,7 @@ import { isIPhoneDeviceWithNotch } from '@vfgroup-oneplatform/foundation/Utils/P
+ import FrameworkTestKeys from '../../../../FrameworkTestKeys';
+ 
+ import styles from './Modal.Styles';
++import { testID } from '../../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const isIPhoneWithNotch = isIPhoneDeviceWithNotch();
+ 
+@@ -67,7 +68,8 @@ class Modal extends Component {
+             i18nKey={title}
+           />
+           <TouchableWithoutFeedback
+-            accessibilityLabel={FrameworkTestKeys.modalCloseBtn}
++            accessibilityLabel={testID(`ST${this.props.accessibilityID}CloseBtn`)}
++            testID={testID(`Tray_close_btn`)}
+             onPress={this.onClose}
+             hitSlop={{
+               top: 10,
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/SubTrayGroup/SubTrayGroup.js b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/SubTrayGroup/SubTrayGroup.js
+index 4e509d7..9b1bde2 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/SubTrayGroup/SubTrayGroup.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/SubTrayGroup/SubTrayGroup.js
+@@ -22,6 +22,8 @@ import FrameworkTestKeys from '../../../../FrameworkTestKeys';
+ import { Tray_Actions_Types } from '../../Utils';
+ 
+ import styles from './SubTrayGroup.Styles';
++import {testID} from '../../../../../../../App/Utils/Helpers/testId.helpers'
++
+ 
+ const cardsOpenBaseDelay = 333;
+ const cardsCloseBaseDelay = 0;
+@@ -216,7 +218,8 @@ class SubTrayGroup extends Component {
+           style={styles.descriptionStyle(theme)}
+           i18nKey={description}
+           placeHolders={trayPlaceHolders && trayPlaceHolders[description]}
+-          testKey={accessibilityID}
++          testKey={testID('Tray_header_txt')}
++          accessibilityLabel={testID('Tray_header_txt')}
+         />
+       </Animated.View>
+     );
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/Tab/Tab.js b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/Tab/Tab.js
+index a34bce4..f8dad77 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/Tab/Tab.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/Components/Tab/Tab.js
+@@ -53,7 +53,7 @@ const Tab = ({
+     <TouchableWithoutFeedback
+       onPress={onPress}
+       accessibilityLabel={accessibilityLabel}
+-      testID={FrameworkTestKeys.trayTabTWF}
++      testID={accessibilityLabel}
+     >
+       <View
+         style={[styles.container, customContainerStyle]}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/TrayHoc.js b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/TrayHoc.js
+index e4ba499..9b23562 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/TrayHoc.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Dashboard/Tray/TrayHoc.js
+@@ -25,6 +25,7 @@ import Tray from './Tray';
+ import styles from './Tray.Styles';
+ import { TRAY_TYPES, Tray_Actions_Types } from './Utils';
+ import { defaultNormalTrayHeight } from './withTray/withTrayHelper';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class TrayHoc extends Component {
+   constructor(props) {
+@@ -185,7 +186,7 @@ class TrayHoc extends Component {
+ 
+         return (
+           <CustomSubTrayItemView
+-            accessibilityLabel={accessibilityID}
++           accessibilityLabel={testID(`${accessibilityID}${index + 1}`)}
+             onPress={() => this.handleOnPressSubTrayItems(item, isLocked)}
+             key={`SubTray-Card-${index}-${item.itemTitle}`}
+           >
+@@ -228,7 +229,7 @@ class TrayHoc extends Component {
+   };
+ 
+   renderContent = (subTray, title, subTrayItem) => {
+-    const accessibilityID = `${FrameworkTestKeys.TrayHocST}${subTrayItem.subTrayID}${FrameworkTestKeys.TrayHocItem}`;
++    const accessibilityID = testID(`ST${subTrayItem.subTrayID}Item`)
+     const {
+       isLoadingError,
+       errorConfig = { data: {}, onTryAgainPress: {} },
+diff --git a/node_modules/@vfgroup-oneplatform/framework/MyPlan/Components/MyPlanCard/MyPlanCard.js b/node_modules/@vfgroup-oneplatform/framework/MyPlan/Components/MyPlanCard/MyPlanCard.js
+index bb34c3a..c026fdc 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/MyPlan/Components/MyPlanCard/MyPlanCard.js
++++ b/node_modules/@vfgroup-oneplatform/framework/MyPlan/Components/MyPlanCard/MyPlanCard.js
+@@ -21,6 +21,7 @@ import MyPlanItem from '../MyPlanItem';
+ import MyPlanUsageItem from '../MyPlanUsageItem';
+ 
+ import styles from './MyPlanCard.Styles';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const CustomLayoutAnimation = {
+   duration: 150,
+@@ -96,6 +97,7 @@ const MyPlanCard = ({
+     if (moment(renewalDate).isValid()) {
+       return (
+         <VFText
++          testKey={testID('MyPlanRenewalDate')}
+           style={[styles.renewalDateStyle(theme), renewalDateStyle]}
+           i18nKey="my_plan_primary_card_header_renewal_date"
+           placeHolders={[dateTransformer(renewalDate, dateFormats.ordinalShortDate)]}
+@@ -239,7 +241,7 @@ const MyPlanCard = ({
+     return _map(_contractData, (item, index) => {
+       const { key, value } = item;
+       if (index < 2) {
+-        return <MyPlanInfoItem label={key} value={value} key={index} />;
++        return <MyPlanInfoItem label={key} value={value} key={index} labelAccessibilityLabel={testID("myPlanInfoItemLabel")} valueAccessibilityLabel={testID("myPlanInfoItemValue")}/>;
+       }
+     });
+   };
+@@ -263,6 +265,7 @@ const MyPlanCard = ({
+             type="primary"
+             style={styles.upgradeButtonStyle}
+             onPress={_onPressUpgradePlan}
++            testKey={testID("myPlanUpgradeButton")} 
+           />
+         )}
+         {renderCustomPlanCTAs(_customPlanCTAs)}
+@@ -280,7 +283,7 @@ const MyPlanCard = ({
+           _map(_contractData, (item, index) => {
+             const { key, value } = item;
+             if (index > 1) {
+-              return <MyPlanInfoItem label={key} value={value} key={index} />;
++              return <MyPlanInfoItem label={key} value={value} key={index} labelAccessibilityLabel={testID("myPlanInfoItemLabel")} valueAccessibilityLabel={testID("myPlanInfoItemValue")} />;
+             }
+           })}
+       </View>
+@@ -290,13 +293,14 @@ const MyPlanCard = ({
+   const renderShowMore = _contractData => {
+     if (_contractData && _contractData.length > 2) {
+       return (
+-        <TouchableWithoutFeedback onPress={handlePressShowMore}>
++        <TouchableWithoutFeedback onPress={handlePressShowMore} testKey={testID("myPlanShowMoreButton")}>
+           <View style={styles.showMoreContainer}>
+             <VFText
+               i18nKey={
+                 isShowMoreOpen ? 'my_plan_primary_card_show_less' : 'my_plan_primary_card_show_more'
+               }
+               style={styles.showMoreText(theme)}
++              testKey={testID("myPlanShowMoreText")} 
+             />
+           </View>
+         </TouchableWithoutFeedback>
+diff --git a/node_modules/@vfgroup-oneplatform/framework/MyPlan/Components/MyPlanItem/MyPlanItem.js b/node_modules/@vfgroup-oneplatform/framework/MyPlan/Components/MyPlanItem/MyPlanItem.js
+index 7bb73a6..3d26220 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/MyPlan/Components/MyPlanItem/MyPlanItem.js
++++ b/node_modules/@vfgroup-oneplatform/framework/MyPlan/Components/MyPlanItem/MyPlanItem.js
+@@ -16,6 +16,7 @@ import { withTheme, LightThemeColors } from '@vfgroup-oneplatform/foundation/Com
+ import { getThemeColors } from '../../../Themes';
+ 
+ import styles from './MyPlanItem.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const MyPlanItem = ({
+   theme,
+@@ -51,7 +52,7 @@ const MyPlanItem = ({
+   const renderLeftText = (() => {
+     if (leftText || LeftComponent) {
+       return (
+-        LeftComponent ?? <VFText style={[styles.leftTextStyle, leftTextStyle]} i18nKey={leftText} />
++        LeftComponent ?? <VFText style={[styles.leftTextStyle, leftTextStyle]} i18nKey={leftText} testKey={testID('myPlanItemLeftText')}/>
+       );
+     }
+   })();
+@@ -65,6 +66,7 @@ const MyPlanItem = ({
+               style={[styles.rightTextStyle(frameworkColors), rightTextStyle]}
+               i18nKey={rightText}
+               placeHolders={rightTextPlaceHolders}
++              testKey={testID("myPlanItemRightText")}
+             />
+           ) : (
+             RightComponent
+@@ -74,6 +76,7 @@ const MyPlanItem = ({
+             <VFText
+               style={[styles.percentageTextStyle(theme), percentageTextStyle]}
+               i18nKey={'(' + percentageValue + '%)'}
++              testKey={testID("myPlanItemPercentageText")}
+             />
+           )}
+         </View>
+@@ -100,6 +103,7 @@ const MyPlanItem = ({
+             styles.percentageIndicatorContainerStyle,
+             percentageIndicatorContainerStyle,
+           ]}
++        progressAccessibilityLabel={testID("myPlanItemProgressbar")}
+         />
+       )
+     );
+@@ -128,7 +132,7 @@ const MyPlanItem = ({
+             withIconBackground && styles.iconContainerBgStyle(frameworkColors),
+           ]}
+         >
+-          <Icon name={images[icon]} type="image" size={iconSize > 30 ? 30 : iconSize} />
++          <Icon name={images[icon]} type="image" size={iconSize > 30 ? 30 : iconSize} testID={testID('myPlanItemIcon')}/>
+         </View>
+       )
+     );
+diff --git a/node_modules/@vfgroup-oneplatform/framework/MyPlan/Screens/MyPlan/MyPlan.js b/node_modules/@vfgroup-oneplatform/framework/MyPlan/Screens/MyPlan/MyPlan.js
+index 169a2e4..f49f364 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/MyPlan/Screens/MyPlan/MyPlan.js
++++ b/node_modules/@vfgroup-oneplatform/framework/MyPlan/Screens/MyPlan/MyPlan.js
+@@ -21,6 +21,7 @@ import MyPlanExtrasModal from '../MyPlanExtrasModal';
+ import Config from '../MyPlanExtrasModal/Config.json';
+ 
+ import styles from './MyPlan.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers';
+ 
+ const MyPlan = ({
+   withTray,
+@@ -112,6 +113,10 @@ const MyPlan = ({
+         iconName={errorIconName}
+         iconButtonName={tryAgainIconName}
+         onPress={onTryAgainPress}
++        iconAccessibilityLabel={testID("myPlanErrorIcon")} 
++        descAccessibilityLabel={testID("myPlanErrorDescription")} 
++        tryAgainAccessibilityLabel={testID("myPlanErrorTryAgainText")}
++        arrowAccessibilityLabel={testID("myPlanErrorTryAgainIcon")}
+       />
+     );
+   };
+@@ -144,7 +149,7 @@ const MyPlan = ({
+           onAddUsagePress={onAddUsagePress}
+           toggleAddUsageModal={toggleAddUsageModal}
+           images={images}
+-        />
++          statusAccessibilityLabel={testID('MyPlanStatus')} titleAccessibilityLabel={testID('MyPlanCardTitle')}/>
+       </View>
+     ));
+     return (
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentBody/PaymentBody.js b/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentBody/PaymentBody.js
+index 3764171..533e09a 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentBody/PaymentBody.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentBody/PaymentBody.js
+@@ -30,6 +30,8 @@ import VoucherTopUp from '../VoucherTopUp/VoucherTopUp';
+ 
+ import styles from './PaymentBody.Styles';
+ 
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
++
+ const PaymentBody = ({
+   title,
+   titlePlaceHolders,
+@@ -163,7 +165,7 @@ const PaymentBody = ({
+     } else if (isVoucherTopUp) {
+       return (
+         <>
+-          <VFText i18nKey={'de_voucher_top_up_subtitle'} style={styles.title(theme)} />
++          <VFText i18nKey={'de_voucher_top_up_subtitle'} style={styles.title(theme)} testKey={testID('voucher_topup_title')} />
+           <VoucherTopUp
+             setIsValidVoucherTopupNumber={setIsValidVoucherTopupNumber}
+             onCodeChanged={onCodeChanged}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentCenterView/PaymentCenterView.js b/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentCenterView/PaymentCenterView.js
+index 9f638f9..4952324 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentCenterView/PaymentCenterView.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentCenterView/PaymentCenterView.js
+@@ -9,6 +9,8 @@ import { LightThemeColors, withTheme } from '@vfgroup-oneplatform/foundation/Com
+ import VFLottieView from '@vfgroup-oneplatform/foundation/Components/VFLottieView';
+ 
+ import styles from './PaymentCenterView.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
++import FoundationTestKeys from '@vfgroup-oneplatform/foundation/FoundationTestKeys';
+ 
+ const PaymentCenterView = ({
+   title,
+@@ -52,7 +54,7 @@ const PaymentCenterView = ({
+       ]}
+     >
+       {sourceImage && (
+-        <Icon name={sourceImage} type="image" style={styles.sourceImage(isLoadingError)} />
++        <Icon name={sourceImage} type="image" style={styles.sourceImage(isLoadingError)} testKey={testID(FoundationTestKeys.errorScreenIcon)}/>
+       )}
+       {lottietype && (
+         <VFLottieView
+@@ -62,7 +64,7 @@ const PaymentCenterView = ({
+           source={customTickLottie}
+           loop={!!isPaymentRequest}
+           isReward
+-          testID={lottieID}
++          testID={testID(lottieID)}
+         />
+       )}
+       {title && (
+@@ -70,7 +72,7 @@ const PaymentCenterView = ({
+           <VFText
+             style={[styles.responseTitle(theme), isReward && styles.giftTitle]}
+             i18nKey={title}
+-            testID={titleID}
++            testID={testID('topUp_success_error_title')}
+             placeHolders={titlePlaceHolders}
+           />
+         </View>
+@@ -84,7 +86,7 @@ const PaymentCenterView = ({
+             styles.alignCenter,
+           ]}
+           i18nKey={subTitle}
+-          testID={subTitleID}
++          testID={testID('topUp_success_error_subtitle')}
+           placeHolders={subTitlePlaceHolders}
+         />
+       )}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentFooter/PaymentFooter.js b/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentFooter/PaymentFooter.js
+index ce89fe5..d38b68b 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentFooter/PaymentFooter.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Payment/Components/PaymentFooter/PaymentFooter.js
+@@ -13,6 +13,7 @@ import { Images } from '../../../Themes';
+ import PaymentMethod from '../PaymentMethod';
+ 
+ import styles from './PaymentFooter.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers';
+ 
+ const PaymentFooter = ({
+   titleAndIconContainerStyle,
+@@ -109,7 +110,7 @@ const PaymentFooter = ({
+             forceTheme={successBtnTheme}
+             textStyle={btnSuccessTextStyle}
+             disabled={isBtnSuccessDisabled || (isPaymentMethod && isEmptyCardsList)}
+-            testID={successBtnID}
++            testID={testID('voucher_tray_footer')}
+           />
+           {hasMoreBtns && (
+             <VFButton
+@@ -119,7 +120,7 @@ const PaymentFooter = ({
+               style={[styles.btnReject, btnRejectStyle]}
+               onPress={() => onRejectBtnPress()}
+               textStyle={btnRejectTextStyle}
+-              testID={rejectBtnID}
++              testID={testID('voucher_tray_reject_btn')}
+             />
+           )}
+         </View>
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Payment/Components/VoucherTopUp/VoucherTopUp.js b/node_modules/@vfgroup-oneplatform/framework/Payment/Components/VoucherTopUp/VoucherTopUp.js
+index 44879d2..4f36eb0 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Payment/Components/VoucherTopUp/VoucherTopUp.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Payment/Components/VoucherTopUp/VoucherTopUp.js
+@@ -11,6 +11,7 @@ import FrameworkTestKeys from '../../../FrameworkTestKeys';
+ import images from '../../../Themes/Modes/Light/Images';
+ 
+ import styles from './VoucherTopUp.Styles.js';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const VoucherTopUp = ({
+   onCodeChanged,
+@@ -63,7 +64,7 @@ const VoucherTopUp = ({
+ 
+   return (
+     <>
+-      <VFText i18nKey={'voucher_top_up_description'} style={styles.subTitle(theme)} />
++      <VFText i18nKey={'voucher_top_up_description'} style={styles.subTitle(theme)} testKey={testID('voucher_topup_description')}/>
+       <View style={styles.voucherInputContainer}>
+         <VFInput
+           label={customLabel}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Payment/PaymentWrapper.js b/node_modules/@vfgroup-oneplatform/framework/Payment/PaymentWrapper.js
+index 89e2d7a..0ee1943 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Payment/PaymentWrapper.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Payment/PaymentWrapper.js
+@@ -19,6 +19,7 @@ import FrameworkTestKeys from '../FrameworkTestKeys';
+ import Payment from './Payment';
+ import styles from './PaymentWrapper.Styles';
+ import { PaymentScreenTypes, PaymentTypes } from './Utils/PaymentTypes';
++import { testID } from '../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const PaymentWrapper = ({
+   isVisible,
+@@ -142,6 +143,7 @@ const PaymentWrapper = ({
+       closeBtnStyle={styles.closeBtnStyle(withTopUpSomeOneElseTitle)}
+       backBtnStyle={styles.backBtnStyle(withTopUpSomeOneElseTitle)}
+       withKeyboardAvoid
++      testID={testID("quickActionMainView")}
+     >
+       <Payment
+         isPaymentMethod={isPaymentMethod}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Components/ContentCard/ContentCard.js b/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Components/ContentCard/ContentCard.js
+index d474e56..e461388 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Components/ContentCard/ContentCard.js
++++ b/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Components/ContentCard/ContentCard.js
+@@ -7,6 +7,7 @@ import { VFText, Icon } from '@vfgroup-oneplatform/foundation/Components';
+ import { useTheme } from '@vfgroup-oneplatform/foundation/Components/Themes';
+ 
+ import { getThemeImages } from '../../../Themes';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ import styles from './ContentCard.styles';
+ 
+@@ -17,25 +18,25 @@ const ContentCard = props => {
+ 
+   return (
+     <View style={styles.container}>
+-      <VFText style={styles.title(theme)} i18nKey={content.title} />
++      <VFText style={styles.title(theme)} i18nKey={content.title} testID={testID(content.title)} />
+       {!!content.description && (
+-        <VFText style={styles.description(theme)} i18nKey={content.description} />
++        <VFText style={styles.description(theme)} i18nKey={content.description} testID={testID(content.description)} />
+       )}
+ 
+       <TouchableOpacity
+-        onPress={() => onActionItemPress(content.actionKey)}
+-        style={styles.actionCard(theme)}
++        onPress={() => onActionItemPress(content.actionKey)} style={styles.actionCard(theme)} testID={testID(content.actionKey)}
+       >
+         <Icon
+           style={styles.leftIcon}
+           name={images?.[content.actionIcon] ?? content.actionIcon}
+           type="image"
+           size={32}
++          testID={testID(content.actionIcon)}
+         />
+ 
+-        <VFText style={styles.actionTitle(theme)} i18nKey={content.actionTitle} />
++        <VFText style={styles.actionTitle(theme)} i18nKey={content.actionTitle} testID={testID(content.actionTitle)} />
+ 
+-        <Icon name={localImages.ic_chevron_right} type="image" size={32} />
++        <Icon name={localImages.ic_chevron_right} type="image" size={32} testID={testID(`${content.title}RightIcon`)} />
+       </TouchableOpacity>
+     </View>
+   );
+diff --git a/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Screens/PersonalPreferences/PersonalPreferences.js b/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Screens/PersonalPreferences/PersonalPreferences.js
+index d5d8f13..d48e3c8 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Screens/PersonalPreferences/PersonalPreferences.js
++++ b/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Screens/PersonalPreferences/PersonalPreferences.js
+@@ -12,6 +12,7 @@ import { ConfirmButton, SuccessModal } from '../../Components';
+ 
+ import PERMISSIONS_KEYS from './PERMISSIONS_KEYS';
+ import styles from './PersonalPreferences.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers';
+ 
+ class PersonalPreferences extends React.Component {
+   constructor(props) {
+@@ -186,6 +187,7 @@ class PersonalPreferences extends React.Component {
+         containerStyle={styles.VFScreenStyle}
+         onClose={this.props.onClose}
+         withHeaderSpace
++        closeButtonTestID={testID('close_button')}
+       >
+         <ScrollView contentContainerStyle={styles.contentContainer}>
+           <VFText i18nKey={this.props.subTitle} style={styles.subTitleStyle} />
+diff --git a/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Screens/PrivacySettings/PrivacySettings.js b/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Screens/PrivacySettings/PrivacySettings.js
+index aa9d6ca..7922b8a 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Screens/PrivacySettings/PrivacySettings.js
++++ b/node_modules/@vfgroup-oneplatform/framework/PrivacySettings/Screens/PrivacySettings/PrivacySettings.js
+@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
+ 
+ import { VFScreen, VFText } from '@vfgroup-oneplatform/foundation/Components';
+ import { useTheme } from '@vfgroup-oneplatform/foundation/Components/Themes';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ import { ContentCard } from '../../Components';
+ 
+@@ -22,6 +23,8 @@ const PrivacySettings = props => {
+       onClose={onClose}
+       headerStyle={styles.vfHeader(theme)}
+       withHeaderSpace
++      closeButtonTestID={testID('close_button')}
++      titleTextAccessibilityLabel={testID('privacy_settings_title')}
+     >
+       <ScrollView
+         showsVerticalScrollIndicator={false}
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Settings/AppSettings/Components/AppSetting.js b/node_modules/@vfgroup-oneplatform/framework/Settings/AppSettings/Components/AppSetting.js
+index db1f253..8437409 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Settings/AppSettings/Components/AppSetting.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Settings/AppSettings/Components/AppSetting.js
+@@ -8,6 +8,7 @@ import { LightThemeColors } from '@vfgroup-oneplatform/foundation/Components/The
+ import { withTheme } from '@vfgroup-oneplatform/foundation/Components/Themes/Provider';
+ 
+ import styles from '../AppSettings.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const SectionContainer = ({ children, isCard, ...props }) => {
+   if (isCard) {
+@@ -33,6 +34,7 @@ function AppSetting({ setting, theme, images }) {
+           subtitle={setting.description}
+           illustrationImage={images[setting.illustrationImage]}
+           illustrationImageStyle={setting.illustrationImageStyle}
++          titleAccessbilityLabel={testID(`${setting.title}_header`)}
+         />
+       )}
+ 
+diff --git a/node_modules/@vfgroup-oneplatform/framework/Settings/components/SettingsRadio/SettingsRadio.js b/node_modules/@vfgroup-oneplatform/framework/Settings/components/SettingsRadio/SettingsRadio.js
+index f412a3d..0a6dce9 100644
+--- a/node_modules/@vfgroup-oneplatform/framework/Settings/components/SettingsRadio/SettingsRadio.js
++++ b/node_modules/@vfgroup-oneplatform/framework/Settings/components/SettingsRadio/SettingsRadio.js
+@@ -10,6 +10,7 @@ import FrameworkTestKeys from '../../../FrameworkTestKeys';
+ import { getThemeImages } from '../../../Themes';
+ 
+ import styles from './SettingsRadio.styles';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ function SettingsRadio({ icon, title, isSelected, onPress, images }) {
+   const theme = useTheme();
+@@ -34,7 +35,7 @@ function SettingsRadio({ icon, title, isSelected, onPress, images }) {
+       </View>
+ 
+       <RadioButton
+-        testID={FrameworkTestKeys.settingsRadioButton}
++        testID={testID(`Settings${title}Radio`)}
+         selected={isSelected}
+         style={styles.radio}
+         onPress={onPress}

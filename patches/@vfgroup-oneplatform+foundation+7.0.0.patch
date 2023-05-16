@@ -1,0 +1,269 @@
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/Card/Card.js b/node_modules/@vfgroup-oneplatform/foundation/Components/Card/Card.js
+index 5f1f0c7..4b864ce 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/Card/Card.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/Card/Card.js
+@@ -48,7 +48,7 @@ const Card = ({
+       accessibilityLabel={accessibilityLabel}
+       testID={accessibilityLabel}
+     >
+-      <View style={cardStyle} {...props} testID={FoundationTestKeys.cardView}>
++      <View style={cardStyle} testID={FoundationTestKeys.cardView} {...props}>
+         {isLoading ? (
+           <View style={styles.shimmerContainer} testID={FoundationTestKeys.cardLoadingView}>
+             <Shimmer config={loadingConfig} shimmerPlaceholderConfig={shimmerPlaceholderConfig} />
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/FilterBar/Item/Item.js b/node_modules/@vfgroup-oneplatform/foundation/Components/FilterBar/Item/Item.js
+index 5dbe8f9..318d2a0 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/FilterBar/Item/Item.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/FilterBar/Item/Item.js
+@@ -10,6 +10,7 @@ import { LightThemeColors } from '../../Themes';
+ import VFText from '../../VFText';
+ 
+ import styles from './Item.Styles';
++import { testID } from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ function Item({
+   theme,
+@@ -28,7 +29,8 @@ function Item({
+     <TouchableOpacity
+       onPress={() => setSelectedCategories(id)}
+       accessibilityLabel={`${textAccessibilityLabel}Btn`}
+-      testID={`${textAccessibilityLabel}Btn` ?? FoundationTestKeys.filterBarItemTO}
++      testID={testID(`${textAccessibilityLabel}Btn`) ?? FoundationTestKeys.filterBarItemTO}
++      accessible={false}
+     >
+       <View
+         style={[
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/QuickActionMenu/QuickActionMenu.js b/node_modules/@vfgroup-oneplatform/foundation/Components/QuickActionMenu/QuickActionMenu.js
+index bbdfe6f..9b371ca 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/QuickActionMenu/QuickActionMenu.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/QuickActionMenu/QuickActionMenu.js
+@@ -203,7 +203,8 @@ class QuickActionMenu extends Component {
+                 <TouchableWithoutFeedback onPress={this.closeModal} accessible={false}>
+                   <Icon
+                     type="image"
+-                    testID={this.props.quickActionMenuCloseIconTestID}
++                    testID={this.props.closeIconAccessibilityLabel ??
++                      FoundationTestKeys.quickActionMenuCloseIcon}
+                     accessibilityLabel={
+                       this.props.closeIconAccessibilityLabel ??
+                       FoundationTestKeys.quickActionMenuCloseIcon
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/Tabs/Tabs.js b/node_modules/@vfgroup-oneplatform/foundation/Components/Tabs/Tabs.js
+index 50e02ad..86da9b0 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/Tabs/Tabs.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/Tabs/Tabs.js
+@@ -21,6 +21,7 @@ import Fonts from '../Themes/Fonts';
+ 
+ import Tab from './Tab';
+ import styles from './Tabs.Styles';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const { width } = Dimensions.get('screen');
+ 
+@@ -190,6 +191,7 @@ class Tabs extends Component {
+           onPress={() => this.handleActiveScrollableTab(item, index)}
+           activeOpacity={1}
+           testID={FoundationTestKeys.tabsScrollableItemLabel}
++          secondLabelTestId={testID('ProductTray_Tab_txt')}
+         />
+         {activeTab === index ? (
+           <Animated.View
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/VFBanner/VFBanner.js b/node_modules/@vfgroup-oneplatform/foundation/Components/VFBanner/VFBanner.js
+index efb094b..cc795cd 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/VFBanner/VFBanner.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/VFBanner/VFBanner.js
+@@ -16,6 +16,7 @@ import VFText from '../VFText';
+ 
+ import styles from './VFBanner.Styles';
+ import { VFBannerLoadingConfig } from './VFBannerLoading/VFBannerLoading.config';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ function VFBanner({
+   backgroundColors,
+@@ -64,6 +65,7 @@ function VFBanner({
+         style={[styles.containerStyle, containerViewStyle]}
+         start={{ x: 0, y: 1 }}
+         end={{ x: 1, y: 0 }}
++        testID={testID('VFBanner_gradientWrapper')}
+         {...extraGradientProps}
+       >
+         {children}
+@@ -72,7 +74,7 @@ function VFBanner({
+   };
+   const renderPrimaryWrapper = ({ children }) => {
+     return (
+-      <View style={[styles.containerStyle, styles.primaryBackground(theme), containerViewStyle]}>
++      <View style={[styles.containerStyle, styles.primaryBackground(theme), containerViewStyle]} testID={testID('VFBanner_primaryWrapper')}>
+         {children}
+       </View>
+     );
+@@ -101,6 +103,7 @@ function VFBanner({
+                 name={leftIcon}
+                 size={leftIconSize}
+                 style={[styles.leftIconStyle, leftIconStyle]}
++                testID={testID('VFBanner_leftIcon')}
+               />
+             )}
+             <VFText
+@@ -108,6 +111,7 @@ function VFBanner({
+               style={[styles.title, titleStyle]}
+               type={isGradient ? 'secondary' : 'primary'}
+               placeHolders={titlePlaceholders}
++              testKey={testID('VFBanner_title')}
+             />
+             {_isFunction(renderRightComponent) && renderRightComponent()}
+           </View>
+@@ -126,6 +130,7 @@ function VFBanner({
+           i18nKey={description}
+           style={[styles.description, descriptionStyle]}
+           type={isGradient ? 'secondary' : 'primary'}
++          testKey={testID('VFBanner_description')}
+         />
+         <View style={styles.buttonsContainer}>
+           {withPrimaryButton && (
+@@ -138,6 +143,7 @@ function VFBanner({
+               title={primaryButtonTitle}
+               onPress={onPrimaryButtonPress.bind(this, hideBanner)}
+               type={isGradient ? 'primaryWhite' : 'primary'}
++              testKey={testID('VFBanner_PrimaryButton')}
+             />
+           )}
+ 
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/VFDropdown/Options/Option/Option.js b/node_modules/@vfgroup-oneplatform/foundation/Components/VFDropdown/Options/Option/Option.js
+index 5534d2f..2a4fd29 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/VFDropdown/Options/Option/Option.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/VFDropdown/Options/Option/Option.js
+@@ -10,6 +10,7 @@ import { withTheme, LightThemeColors } from '../../../Themes';
+ import VFText from '../../../VFText';
+ 
+ import styles from './Option.Styles';
++import {testID} from '../../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ function Option({
+   theme,
+@@ -42,6 +43,7 @@ function Option({
+         const layout = event.nativeEvent.layout;
+         dropdownCoordinates[index] = layout.y;
+       }}
++      testID={testID('dropdownOption')}
+     >
+       <TouchableHighlight
+         underlayColor={theme.colors.picker.dropdownActiveItem}
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/VFDropdown/SelectInput/SelectInput.js b/node_modules/@vfgroup-oneplatform/foundation/Components/VFDropdown/SelectInput/SelectInput.js
+index f33ded4..1305b0f 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/VFDropdown/SelectInput/SelectInput.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/VFDropdown/SelectInput/SelectInput.js
+@@ -10,7 +10,7 @@ import { withTheme, LightThemeColors } from '../../Themes';
+ import VFText from '../../VFText';
+ 
+ import styles from './SelectInput.Styles';
+-
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ function SelectInput({
+   theme,
+   getLayout,
+@@ -38,6 +38,7 @@ function SelectInput({
+       onPress={() => toggle()}
+       activeOpacity={1}
+       style={[styles.touchableArea, styles.dropDown(theme), style]}
++      testID={testID('dropdownSelectInput')}
+     >
+       {selectedItem.value && Boolean(title) && (
+         <VFText style={[styles.titleStyle(theme), titleStyle]} i18nKey={title} />
+@@ -51,6 +52,7 @@ function SelectInput({
+             placeholderStyle,
+             selectedItem?.label !== null && selectedLabelStyle,
+           ]}
++          testID={testID('dropdownLabel')}
+           {...labelProps}
+         />
+ 
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/VFHeaderTabs/TabItem/TabItem.js b/node_modules/@vfgroup-oneplatform/foundation/Components/VFHeaderTabs/TabItem/TabItem.js
+index 21829aa..ae34b75 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/VFHeaderTabs/TabItem/TabItem.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/VFHeaderTabs/TabItem/TabItem.js
+@@ -8,6 +8,7 @@ import { useTheme, LightThemeColors } from '../../Themes';
+ import VFText from '../../VFText';
+ 
+ import styles from './TabItem.styles';
++import {testID} from '../../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ function TabItem({
+   handleOnPress,
+@@ -20,7 +21,7 @@ function TabItem({
+ }) {
+   const theme = useTheme() || LightThemeColors;
+   return (
+-    <TouchableWithoutFeedback onPress={() => handleOnPress(tab.index)} accessible={false}>
++    <TouchableWithoutFeedback onPress={() => handleOnPress(tab.index)} accessible={false} testID={testID('tabButton')}>
+       <View style={{ ...tabStyle }}>
+         <VFText
+           testKey={tab.accessibilityLabel}
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/VFImageHeader/VFImageHeader.js b/node_modules/@vfgroup-oneplatform/foundation/Components/VFImageHeader/VFImageHeader.js
+index 37ea969..9cc8596 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/VFImageHeader/VFImageHeader.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/VFImageHeader/VFImageHeader.js
+@@ -8,6 +8,7 @@ import { useTheme, getThemeImages } from '../Themes';
+ import VFHeader from '../VFHeader';
+ 
+ import styles from './VFImageHeader.Styles';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ function VFImageHeader({
+   withOverlay,
+@@ -32,6 +33,7 @@ function VFImageHeader({
+         source={image}
+         style={[styles.image, imageStyle]}
+         resizeMode={imageResizeMode}
++        testID={testID('VFImageHeader_img')}
+       >
+         {withOverlay && <Image source={Images.header_image_overlay} style={styles.image} />}
+       </ImageBackground>
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/VFPickerSelect/VFPickerSelect.js b/node_modules/@vfgroup-oneplatform/foundation/Components/VFPickerSelect/VFPickerSelect.js
+index 3785745..ac5fae2 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/VFPickerSelect/VFPickerSelect.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/VFPickerSelect/VFPickerSelect.js
+@@ -14,6 +14,7 @@ import VFDropdown from '../VFDropdown';
+ import VFText from '../VFText';
+ 
+ import styles from './VFPickerSelect.Styles';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ class VFPickerSelect extends PureComponent {
+   static handlePlaceholder({ placeholder }) {
+@@ -204,6 +205,7 @@ class VFPickerSelect extends PureComponent {
+           value={item.value}
+           key={item.key || item.label}
+           color={Platform.OS === 'android' ? Colors.dark_grey : theme.colors.picker.itemColor}
++          testID={testID('PickerItem')}
+         />
+       );
+     });
+diff --git a/node_modules/@vfgroup-oneplatform/foundation/Components/VFShowMoreText/VFShowMoreText.js b/node_modules/@vfgroup-oneplatform/foundation/Components/VFShowMoreText/VFShowMoreText.js
+index 45cb345..6bf00c5 100644
+--- a/node_modules/@vfgroup-oneplatform/foundation/Components/VFShowMoreText/VFShowMoreText.js
++++ b/node_modules/@vfgroup-oneplatform/foundation/Components/VFShowMoreText/VFShowMoreText.js
+@@ -10,6 +10,7 @@ import VFText from '../VFText';
+ 
+ import styles from './VFShowMoreText.Styles';
+ import ViewMoreText from './ViewMoreText';
++import { testID } from '../../../../../App/Utils/Helpers/testId.helpers';
+ 
+ const onPress = (handlePress, onShowMoreToggle, isExpanded) => {
+   _isFunction(onShowMoreToggle) && onShowMoreToggle(isExpanded);
+@@ -34,6 +35,7 @@ function VFShowMoreText({
+           <VFText
+             style={[styles.showText(theme), styles.showMoreText(numberOfLines)]}
+             i18nKey={showMoreText}
++            testKey={testID('ShowMoreBtn')}
+           />
+         </TouchableOpacity>
+       </>
+@@ -44,7 +46,7 @@ function VFShowMoreText({
+       <>
+         {_isFunction(renderContent) ? renderContent(true) : null}
+         <TouchableOpacity onPress={onPress.bind(null, handlePress, onShowMoreToggle, false)}>
+-          <VFText style={styles.showText(theme)} i18nKey={showLessText} />
++          <VFText style={styles.showText(theme)} i18nKey={showLessText} testKey={testID('ShowLessBtn')}/>
+         </TouchableOpacity>
+       </>
+     );

@@ -1,0 +1,46 @@
+{ "title": "settings_title",
+    "sections": [
+      {
+        "sectionIcon": "settings_icDashboard",
+        "sectionTitle": "settings_app_settings",
+        "type": "SECTIONS_LIST",
+        "sectionItems": [
+          {
+            "sectionItemTitle": "settings_reset_the_app",
+            "sectionItemAction": "screenName"
+          },
+          {
+            "sectionItemTitle": "settings_app_login",
+            "sectionItemAction": "screenName"
+          },
+          {
+            "sectionItemTitle": "settings_app_privacy",
+            "sectionItemAction": "screenName"
+          },
+          {
+            "sectionItemTitle": "settings_device_permissions",
+            "sectionItemAction": "screenName"
+          },
+          {
+            "sectionItemTitle": "settings_display_options",
+            "sectionItemAction": "screenName"
+          }
+        ]
+      },
+      {
+        "sectionIcon": "settings_usefulInfo",
+        "sectionTitle": "settings_useful_information",
+        "type": "SECTIONS_LIST",
+        "sectionItems": [
+          {
+            "sectionItemTitle": "settings_terms_and_conditions",
+            "sectionItemAction": "screenName"
+          },
+          {
+            "sectionItemTitle": "settings_app_privacy_supplement",
+            "sectionItemAction": "screenName"
+          }
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,44 @@
+diff --git a/node_modules/@react-native-cookies/cookies/android/src/main/java/com/reactnativecommunity/cookies/CookieManagerModule.java b/node_modules/@react-native-cookies/cookies/android/src/main/java/com/reactnativecommunity/cookies/CookieManagerModule.java
+index 50c5f9d..11d380b 100644
+--- a/node_modules/@react-native-cookies/cookies/android/src/main/java/com/reactnativecommunity/cookies/CookieManagerModule.java
++++ b/node_modules/@react-native-cookies/cookies/android/src/main/java/com/reactnativecommunity/cookies/CookieManagerModule.java
+@@ -40,7 +40,6 @@ public class CookieManagerModule extends ReactContextBaseJavaModule {
+     private static final String INVALID_URL_MISSING_HTTP = "Invalid URL: It may be missing a protocol (ex. http:// or https://).";
+     private static final String INVALID_COOKIE_VALUES = "Unable to add cookie - invalid values";
+     private static final String GET_ALL_NOT_SUPPORTED = "Get all cookies not supported for Android (iOS only)";
+-    private static final String CLEAR_BY_NAME_NOT_SUPPORTED = "Cannot remove a single cookie by name on Android";
+     private static final String INVALID_DOMAINS = "Cookie URL host %s and domain %s mismatched. The cookie won't set correctly.";
+ 
+     private CookieSyncManager mCookieSyncManager;
+@@ -130,7 +129,30 @@ public class CookieManagerModule extends ReactContextBaseJavaModule {
+ 
+     @ReactMethod
+     public void clearByName(String url, String name, Boolean useWebKit, final Promise promise) {
+-        promise.reject(new Exception(CLEAR_BY_NAME_NOT_SUPPORTED));
++        try {
++            String cookies = getCookieManager().getCookie(url);
++            if (cookies == null) {
++                promise.resolve(true);
++            } else {
++                String[] splitCookies = cookies.split(";");
++                for (String cookie : splitCookies) {
++                    String[] cookieParts = cookie.split("=");
++                    if (cookieParts.length > 0 && cookieParts[0].trim().equals(name)) {
++                        String newCookie = cookieParts[0].trim() + "=;expires=Sat, 1 Jan 2000 00:00:01 UTC;";
++                        getCookieManager().setCookie(url, newCookie);
++                        String newCookie2 = cookieParts[0].trim() + "=; domain=vodafone.de; expires=Sat, 1 Jan 2000 00:00:01 UTC;";
++                        getCookieManager().setCookie(url, newCookie2);
++                        String newCookie3 = cookieParts[0].trim() + "=; domain=www.vodafone.de; expires=Sat, 1 Jan 2000 00:00:01 UTC;";
++                        getCookieManager().setCookie(url, newCookie3);
++                        break;
++                    }
++                }
++                getCookieManager().removeExpiredCookie();
++                promise.resolve(true);
++            }
++        } catch (Exception e) {
++            promise.reject(e);
++        }
+     }
+ 
+     @ReactMethod

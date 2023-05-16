@@ -1,0 +1,61 @@
+{
+  "header": "privacySettingsHeader",
+  "contents": [
+    {
+      "id": "10",
+      "title": "termsOfUseItemTitle",
+      "description": "termsOfUseItemDescription",
+      "actionIcon": "PrivacySettingsTermsOfUse",
+      "actionTitle": "termsOfUseActionTitle",
+      "actionKey": "TermsOfUseScreen"
+    },
+    {
+      "id": "20",
+      "title": "cookiesAndTrackingItemTitle",
+      "description": "cookiesAndTrackingItemDescription",
+      "actionIcon": "PrivacySettingsCookiesAndTracking",
+      "actionTitle": "cookiesAndTrackingItemActionTitle",
+      "actionKey": "PersonalPreferences"
+    },
+    {
+      "id": "30",
+      "title": "adviceAndOffersItemTitle",
+      "description": "adviceAndOffersItemDescription",
+      "actionIcon": "PrivacySettingsAdviceAndOffers",
+      "actionTitle": "adviceAndOffersActionTitle",
+      "actionKey": "ThirdPartyTracking"
+    },
+    {
+      "id": "40",
+      "title": "vodafoneHappyItemTitle",
+      "description": "vodafoneHappyItemDescription",
+      "actionIcon": "ic_rewards",
+      "actionTitle": "vodafoneHappyItemActionTitle",
+      "actionKey": "EmptyScreen"
+    },
+    {
+      "id": "50",
+      "title": "contactPreferencesItemTitle",
+      "description": "contactPreferencesItemDescription",
+      "actionIcon": "ic_contact_us_customer_care",
+      "actionTitle": "contactPreferencesItemActionTitle",
+      "actionKey": "ContactPreferences"
+    },
+    {
+      "id": "60",
+      "title": "privacyNotesItemTitle",
+      "description": "privacyNotesItemDescription",
+      "actionIcon": "PrivacySettingsPrivacyNotes",
+      "actionTitle": "privacyNotesActionTitle",
+      "actionKey": "EmptyScreen"
+    },
+    {
+      "id": "70",
+      "title": "imprintItemTitle",
+      "description": "imprintItemDescription",
+      "actionIcon": "PrivacySettingsImprint",
+      "actionTitle": "imprintActionTitle",
+      "actionKey": "ImprintDetailsScreen"
+    }
+  ]
+}

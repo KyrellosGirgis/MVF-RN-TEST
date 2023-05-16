@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MeinVodafone</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">UbYnDi24pMs3AgKKzv_axPEPreKNRWx2_UAyL</string>
+    <string name="code">aa5ed74d:93c72836</string>
+    <string-array name="pins">
+        <item>sha256/48hXNwn3laJAzsrIBprOcewUb097BGNL7e+MVM7Rcis=</item>
+        <item>sha256/c/nqgPa16tHvHrSGY1qOHEk3d61bI83zs/QP4Ciafvs=</item>
+        <item>sha256/JSMzqOOrtyOT1kmau6zKhgT676hGgczD5VMdRMyJZFA=</item>
+        <item>sha256/++MBgDH5WGvL9Bcn5Be30cRcL0f5O+NyoXuWtQdX1aI=</item>
+    </string-array>
+    <string name="integrityAlert">Sorry, you can\'t use this app as we\'ve detected that your device is not secure.</string>
+</resources>

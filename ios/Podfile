@@ -1,0 +1,111 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+require 'rbconfig'
+
+platform :ios, '12.4'
+install! 'cocoapods', :deterministic_uuids => false
+
+source 'https://cdn.cocoapods.org/'
+source 'https://github.vodafone.com/VFGroup-MyVodafone-OnePlatform/iOS-CocoaPods.git'
+
+File.foreach('../'+ ENV['ENVFILE']) { |line|
+    key, value = line.strip.split('=')
+    ENV[key] = value
+  }
+
+target 'MeinVodafone' do
+
+  pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
+
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways/Permission-LocationAlways.podspec"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse/Permission-LocationWhenInUse.podspec"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications/Permission-Notifications.podspec"
+  pod 'Permission-Contacts', :path => "#{permissions_path}/Contacts/Permission-Contacts.podspec"
+  pod 'Permission-FaceID', :path => "#{permissions_path}/FaceID"
+  pod "tealium-react-native-swift", :path => '../node_modules/tealium-react-native/tealium-react-native-swift.podspec'
+  pod 'Permission-AppTrackingTransparency', :path => "#{permissions_path}/AppTrackingTransparency"
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+  pod 'NetPerformSDK', '8.1.1'
+  pod 'GoogleMaps'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+
+  if ENV['IS_PRODUCTION'] == 'false'
+    pod 'FLEX'
+    pod 'react-native-shake', :path => '../node_modules/react-native-shake'
+
+  end
+
+  pod 'TrustKit'
+
+  # React Native Maps dependencies
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+  
+  config = use_native_modules!
+
+  # Flags change depending on the env values.
+  flags = get_default_flags()
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :subspecs => ['RCTLinkingIOS'],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :production => false,
+    :hermes_enabled => false,
+    :fabric_enabled => false,
+    :flipper_configuration => FlipperConfiguration.disabled,
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+
+  target 'MeinVodafoneTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  plugin 'cocoapods-keys'
+
+  ENVFILE = '$(PODS_ROOT)/../../'+ ENV['ENVFILE']
+
+  post_install do |installer|
+    react_native_post_install(installer)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if target.name == 'react-native-config'
+          config.build_settings['ENVFILE'] = ENVFILE
+        end
+        if RbConfig::CONFIG['host_cpu'] == 'arm64'
+          config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+        end
+      end
+    end
+  end
+  
+
+ 
+  post_integrate do |installer|
+    project =  installer.aggregate_targets[0].user_project
+    project.targets.each do |target|
+      target.build_configurations.each do |config|
+            if target.name == 'MeinVodafone'
+              
+               config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+               config.build_settings['OTHER_SWIFT_FLAGS'] ||= ['$(inherited)']
+               
+               if (ENV['IS_PRODUCTION'] == 'false')
+                config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'].delete(' IS_PRODUCTION=1') # as string
+                #swift
+                config.build_settings['OTHER_SWIFT_FLAGS'].slice! ' -DIS_PRODUCTION'
+              else
+                config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << ' IS_PRODUCTION=1'
+                config.build_settings['OTHER_SWIFT_FLAGS'] << ' -DIS_PRODUCTION'
+              end
+            end
+          end
+    end
+    project.save
+  end
+end
+

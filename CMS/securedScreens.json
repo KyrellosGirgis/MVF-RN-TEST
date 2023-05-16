@@ -1,0 +1,5 @@
+{
+  "securedScreens": {
+    "screens": ["HomeScreen", "BillDetails", "BillLanding", "PrivacySettings"]
+  }
+}

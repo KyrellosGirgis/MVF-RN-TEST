@@ -1,0 +1,43 @@
+{
+  "deeplinkScreens": [
+    {
+      "screenId": "home",
+      "deeplinkSchemes": [
+        "https://www.vodafone.de/meinvodafone/app/home",
+        "mvf://home",
+        "mcy://home"
+      ]
+    },
+    {
+      "screenId": "app_settings",
+      "deeplinkSchemes": [
+        "https://www.vodafone.de/meinvodafone/app/app_settings",
+        "mvf://app_settings",
+        "mcy://app_settings"
+      ]
+    },
+    {
+      "screenId": "consumption_tile_customization",
+      "deeplinkSchemes": [
+        "https://www.vodafone.de/meinvodafone/app/cons_tile_customization",
+        "mvf://cons_tile_customization",
+        "mcy://cons_tile_customization"
+      ]
+    },
+    {
+      "screenId": "dunning_internal_browser",
+      "deeplinkSchemes": [
+        "https://www.vodafone.de/meinvodafone/app/overview/dunning"
+      ]
+    },
+    {
+      "screenId": "bill_landing",
+      "deeplinkSchemes": [
+        "https://www.vodafone.de/meinvodafone/app/billOverview",
+        "https://www.vodafone.de/meinvodafone/app/archive",
+        "https://www.vodafone.de/meinvodafone/app/overview",
+        "https://www.vodafone.de/meinvodafone/app/overview/latest-bill"
+      ]
+    }
+  ]
+}

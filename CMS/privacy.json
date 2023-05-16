@@ -1,0 +1,176 @@
+{
+  "privacy": {
+    "data_privacy": {
+      "dataPrivacyUrl": "https://www.vodafone.de/unternehmen/soziale-verantwortung/datenschutz-mv-app.html"
+    },
+    "cookie_permissions": { "consent_version": 4 },
+    "bew_permissions": {
+      "bewMappingVersions": [
+        {
+          "version": 4,
+          "serviceIds": [
+            {
+              "serviceId": "GENE",
+              "shortDescription": "bew_permissions_gene_short_description",
+              "longDescription": "bew_permissions_gene_long_description"
+            },
+            {
+              "serviceId": "CDEV",
+              "shortDescription": "bew_permissions_cdev_short_description",
+              "longDescription": "bew_permissions_cdev_long_description"
+            },
+            {
+              "serviceId": "GEO",
+              "shortDescription": "bew_permissions_geo_short_description",
+              "longDescription": "bew_permissions_geo_long_description"
+            },
+            {
+              "serviceId": "PDEV",
+              "shortDescription": "bew_permissions_pdev_short_description",
+              "longDescription": "bew_permissions_pdev_long_description"
+            },
+            {
+              "serviceId": "WBT",
+              "shortDescription": "bew_permissions_wbt_short_description",
+              "longDescription": "bew_permissions_wbt_long_description"
+            },
+            {
+              "serviceId": "SMMS",
+              "shortDescription": "bew_permissions_smms_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "EMAL",
+              "shortDescription": "bew_permissions_emal_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "POST",
+              "shortDescription": "bew_permissions_post_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "TWIB",
+              "shortDescription": "bew_permissions_twib_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "TOUT",
+              "shortDescription": "bew_permissions_tout_short_description",
+              "longDescription": ""
+            }
+          ]
+        },
+        {
+          "version": 3,
+          "serviceIds": [
+            {
+              "serviceId": "GENE",
+              "shortDescription": "bew_permissions_gene_short_description",
+              "longDescription": "bew_permissions_gene_long_description"
+            },
+            {
+              "serviceId": "CDEV",
+              "shortDescription": "bew_permissions_cdev_short_description",
+              "longDescription": "bew_permissions_cdev_long_description"
+            },
+            {
+              "serviceId": "GEO",
+              "shortDescription": "bew_permissions_geo_short_description",
+              "longDescription": "bew_permissions_geo_long_description"
+            },
+            {
+              "serviceId": "PDEV",
+              "shortDescription": "bew_permissions_pdev_short_description",
+              "longDescription": "bew_permissions_pdev_long_description"
+            },
+            {
+              "serviceId": "WBT",
+              "shortDescription": "bew_permissions_wbt_short_description",
+              "longDescription": "bew_permissions_wbt_long_description"
+            },
+            {
+              "serviceId": "SMMS",
+              "shortDescription": "bew_permissions_smms_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "EMAL",
+              "shortDescription": "bew_permissions_emal_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "POST",
+              "shortDescription": "bew_permissions_post_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "TWIB",
+              "shortDescription": "bew_permissions_twib_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "TOUT",
+              "shortDescription": "bew_permissions_tout_short_description",
+              "longDescription": ""
+            }
+          ]
+        },
+        {
+          "version": 1,
+          "serviceIds": [
+            {
+              "serviceId": "GENE",
+              "shortDescription": "bew_permissions_gene_short_description",
+              "longDescription": "bew_permissions_gene_long_description"
+            },
+            {
+              "serviceId": "CDEV",
+              "shortDescription": "bew_permissions_cdev_short_description",
+              "longDescription": "bew_permissions_cdev_long_description"
+            },
+            {
+              "serviceId": "PDEV",
+              "shortDescription": "bew_permissions_pdev_short_description",
+              "longDescription": "bew_permissions_pdev_long_description"
+            },
+            {
+              "serviceId": "SMMS",
+              "shortDescription": "bew_permissions_smms_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "EMAL",
+              "shortDescription": "bew_permissions_emal_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "POST",
+              "shortDescription": "bew_permissions_post_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "TWIB",
+              "shortDescription": "bew_permissions_twib_short_description",
+              "longDescription": ""
+            },
+            {
+              "serviceId": "TOUT",
+              "shortDescription": "bew_permissions_tout_short_description",
+              "longDescription": ""
+            }
+          ]
+        }
+      ],
+      "bewMappingServices": [
+        {
+          "permissionId": "PDX",
+          "serviceId": "NONE",
+          "bewVersion": 4,
+          "shortDescription": "bew_permissions_pdx_short_description",
+          "longDescription": "bew_permissions_pdx_long_description"
+        }
+      ]
+    }
+  }
+}

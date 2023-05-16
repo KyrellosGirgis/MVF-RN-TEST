@@ -1,0 +1,1193 @@
+---
+format_version: '11'
+default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+project_type: react-native
+trigger_map:
+  - pull_request_source_branch: '*'
+    workflow: PR
+workflows:
+  Build-App:
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - authenticate-with-github-oauth@0:
+          inputs:
+            - access_token: $GITHUB_TOKEN_VFDE_CICD
+            - username: $cicd_git_user
+      - git-clone@6:
+          inputs:
+            - fetch_tags: 'yes'
+      - file-downloader@1:
+          inputs:
+            - destination: $FILE_KEYS_JSON_GPG_PATH
+            - source: $BITRISEIO_keys_json_URL
+          title: keys json File Downloader
+      - decrypt-file@0:
+          inputs:
+            - output_file_path: $FILE_KEYS_JSON_PATH
+            - encrypted_file_path: $FILE_KEYS_JSON_GPG_PATH
+            - decrypt_passphrase: $KEYS_GPG_PASSPHRASE
+          title: keys json Decrypt file
+      - file-downloader@1:
+          inputs:
+            - destination: $FILE_NPMRC_GPG_PATH
+            - source: $BITRISEIO_npmrc_URL
+          title: npmrc File Downloader
+      - decrypt-file@0:
+          inputs:
+            - encrypted_file_path: $FILE_NPMRC_GPG_PATH
+            - output_file_path: $FILE_NPMRC_PATH
+            - decrypt_passphrase: $KEYS_GPG_PASSPHRASE
+          title: npmrc Decrypt file
+      - file-downloader@1:
+          inputs:
+            - destination: $FILE_IOS_G_SERVICES_PLIST_GPG_PATH
+            - source: $BITRISEIO_ios_g_services_URL
+          title: ios google services json File Downloader
+      - decrypt-file@0:
+          inputs:
+            - output_file_path: $FILE_IOS_G_SERVICES_PLIST_PATH
+            - encrypted_file_path: $FILE_IOS_G_SERVICES_PLIST_GPG_PATH
+            - decrypt_passphrase: $KEYS_GPG_PASSPHRASE
+          title: ios google services json Decrypt file
+      - file-downloader@1:
+          inputs:
+            - destination: $FILE_ANDROID_G_SERVICES_JSON_GPG_PATH
+            - source: $BITRISEIO_android_g_services_URL
+          title: android google services json File Downloader
+      - decrypt-file@0:
+          inputs:
+            - output_file_path: $FILE_ANDROID_G_SERVICES_JSON_PATH
+            - encrypted_file_path: $FILE_ANDROID_G_SERVICES_JSON_GPG_PATH
+            - decrypt_passphrase: $KEYS_GPG_PASSPHRASE
+          title: android google services json Decrypt file
+      - npm@1:
+          run_if: true
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: ci
+          title: npm run CI
+      - npm@1:
+          run_if: true
+          inputs:
+            - command: run lint-test-full-coverage
+            - npm_version: $NPM_VERSION
+          title: Linting and Testing
+      - deploy-to-bitrise-io@2:
+          run_if: true
+          inputs:
+            - notify_user_groups: none
+            - is_compress: 'true'
+            - deploy_path: $BITRISE_SOURCE_DIR/coverage
+          is_always_run: false
+          title: Deploy Coverage Report Artifacts
+      - deploy-to-bitrise-io@2:
+          inputs:
+            - deploy_path: $BITRISE_SOURCE_DIR
+            - is_compress: 'true'
+          title: Deploy Source Dir
+      - script@1:
+          run_if: '{{enveq "SEND_TO_FIREBASE" "true"}}'
+          inputs:
+            - content: >-
+                #!/usr/bin/env bash
+
+                # fail if any commands fails
+
+                set -e
+
+                # make pipelines' return status equal the last command to exit with
+                a non-zero status, or zero if all commands exit successfully
+
+                set -o pipefail
+
+                set -x
+                # write your script here
+
+                git tag $VERSION_CODE
+
+                git push --no-verify origin $VERSION_CODE
+
+          title: Tag Commit
+      - git-commit-changelog@1: {}
+      - npm@1:
+          run_if: true
+          inputs:
+            - command: run generate-release-notes
+            - npm_version: $NPM_VERSION
+          title: Release Note Script
+
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+    envs:
+      - opts:
+          is_expand: false
+        ENVFILE: .env.live-internal
+    description: >-
+
+      - This workflow is triggered by the nightly_build_init flow when there is
+      a change in the versionCode.
+
+
+      - we clone the repo.
+
+
+      - we run linting and unit testing checks.
+
+
+      - we deploy the coverage report as an artifact.
+
+
+      - we install the libraries used in the app and then we publish node
+      modules as an artifact to be used by iOS and Android builds.
+
+
+      - Android and iOS flows are triggered in parallel.
+    after_run:
+      - white-source
+      - trigger_android_ios_builds_in_parallel
+  Nightly-Build-Init:
+    description: >-
+      - This workflow is for checking whether to trigger nightly build or no.
+
+
+
+      - we clone the repo and get the version code using this library:
+
+      https://github.com/passsy/git-revision
+
+
+
+      - we compare it with versionCode of  the latest successful run, if there
+      is a change, the nightly build flow is trigegred.
+
+
+
+      - we publish the current version code as an artifact to be used for the
+      next run.
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone@6:
+          inputs:
+            - fetch_tags: 'yes'
+      - github-release-downloader@0:
+          inputs:
+            - source: $GIT_REVISION_FILE_NAME
+            - repository_url: 'https://github.com/am-vodafone/git-revision'
+            - github_access_token: $GITHUB_TOKEN_VFDE_CICD
+      - script@1:
+          title: Get Version Code
+          inputs:
+            - content: >+
+                #!/usr/bin/env bash
+
+                set -e
+
+                set -x
+
+
+                #curl -H "Authorization: token  $GITHUB_TOKEN_VFDE_CICD" -O
+                $GIT_REVISION_URL
+
+
+
+                tar -xvf $GIT_REVISION_FILE_NAME
+
+
+
+
+
+                x=$(./git-revision/git-revision -b develop)
+
+
+                VERSION_CODE=$(echo $x | cut -d '_' -f1)
+
+
+
+                envman add --key VERSION_CODE --value $VERSION_CODE
+
+
+
+
+                #sleep 9000000
+      - script@1:
+          run_if: true
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                # fail if any commands fails
+                set -e
+                # debug log
+                set -x
+
+                last_version_code=$(git tag --list --sort=committerdate | tail -n1) 
+
+                if [ $last_version_code != $VERSION_CODE ]; 
+                then
+                envman add --key SHOULD_TRIGGER_APP_BUILD --value true
+                fi
+          title: SHOULD_TRIGGER_APP_BUILD
+      - set-env-var@0:
+          inputs:
+            - destination_keys: SEND_TO_FIREBASE
+            - value: 'true'
+          title: Set SEND_TO_FIREBASE
+      - trigger-bitrise-workflow@0:
+          run_if: '{{enveq "SHOULD_TRIGGER_APP_BUILD" "true"}}'
+          inputs:
+            - api_token: $BUILD_TRIGGER_TOKEN
+            - exported_environment_variable_names: VERSION_CODE|SEND_TO_FIREBASE
+            - workflow_id: Build-App
+          title: Trigger Nightly Build
+  PR:
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - authenticate-with-github-oauth@0:
+          inputs:
+            - access_token: $GITHUB_TOKEN_VFDE_CICD
+            - username: $cicd_git_user
+      - git-clone@6: {}
+      - file-downloader@1:
+          inputs:
+            - destination: $FILE_KEYS_JSON_GPG_PATH
+            - source: $BITRISEIO_keys_json_URL
+          title: keys json File Downloader
+      - decrypt-file@0:
+          inputs:
+            - output_file_path: $FILE_KEYS_JSON_PATH
+            - encrypted_file_path: $FILE_KEYS_JSON_GPG_PATH
+            - decrypt_passphrase: $KEYS_GPG_PASSPHRASE
+          title: keys json Decrypt file
+      - file-downloader@1:
+          inputs:
+            - destination: $FILE_NPMRC_GPG_PATH
+            - source: $BITRISEIO_npmrc_URL
+          title: npmrc File Downloader
+      - decrypt-file@0:
+          inputs:
+            - encrypted_file_path: $FILE_NPMRC_GPG_PATH
+            - output_file_path: $FILE_NPMRC_PATH
+            - decrypt_passphrase: $KEYS_GPG_PASSPHRASE
+          title: npmrc Decrypt file
+      - npm@1:
+          run_if: true
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: ci
+          title: npm run CI
+      - npm@1:
+          run_if: false
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: run compare-localisation-files
+          title: npm run compare-localisation-files
+      - npm@1:
+          run_if: true
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: run lint-test-full-coverage-danger
+          title: npm run linting and testing
+      - deploy-to-bitrise-io@2:
+          run_if: true
+          inputs:
+            - is_compress: 'true'
+            - deploy_path: /bitrise/src/coverage
+          title: Deploy Coverage
+      - sonarqube-scanner@1:
+          run_if: false
+          inputs:
+            - is_debug: 'true'
+            - scanner_properties: >+
+                sonar.sources=./App
+
+
+                sonar.login=$SONAR_TOKEN
+
+
+                #environment variables are evaluated
+
+
+                sonar.projectKey=MVF-RN
+
+
+                sonar.host.url=https://sonar-de-app.vois.skytap.cloud.vodafone.com/sonar
+
+
+                sonar.report.export.path=sonar-report.json
+
+
+                #sonar.tests=/bitrise/src/__Tests__/
+
+
+                sonar.sourceEncoding=UTF-8
+
+
+                sonar.language=js
+
+
+                sonar.branch.name=$BITRISE_GIT_BRANCH
+
+
+                sonar.javascript.reportPaths=/bitrise/src/coverage/lcov-report
+      - npm@1:
+          run_if: true
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: run danger
+          title: npm run Danger
+
+    description: |-
+      - This workflow is triggered whenever there is a PR.
+
+      - we clone the repo.
+
+      - we run linting and unit testing checks.
+
+      - we deploy the coverage report as an artifact.
+
+      - we run sonarQube scanner.
+    after_run:
+      - white-source
+  Common_IOS_Steps:
+    steps:
+      - get-app@0:
+          inputs:
+            - access_token: $PERSONAL_ACCESS_TOKEN
+            - app_slug: $BITRISE_APP_SLUG
+            - workflow: Build-App
+            - directory_name: ''
+            - artifact_name: git.zip
+          title: Download node_modules
+      - unzip@0:
+          inputs:
+            - output_path: ''
+            - archive_path: git.zip
+          title: Unzip node_modules
+      - script@1:
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                # fail if any commands fails
+                #set -e
+                # debug log
+
+                set -x
+
+                echo " " >> ~/.netrc;
+
+                echo "machine github.vodafone.com" >> ~/.netrc;
+
+                echo "login VFDE-CICD" >> ~/.netrc;
+
+                echo "password $GITHUB_VODAFONE_TOKEN" >> ~/.netrc;
+
+                chmod 600 ~/.netrc  # Needed permission level for CocoaPods
+
+          title: Set Token for github enterprise vodafone for cocoapods
+      - ruby-script@2:
+          inputs:
+            - ruby_content: |
+                puts "Installing cocoapods-keys"
+            - gemfile_content: |
+                source 'https://rubygems.org'
+
+                gem 'cocoapods', '~> 1.11', '>= 1.11.3'
+                gem 'cocoapods-keys', '~> 2.3', '>= 2.3.1'
+          title: Install cocoapods-keys
+      - npm@1:
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: run pod
+          title: Set Secret Keys
+      - certificate-and-profile-installer@1:
+          inputs:
+            - install_defaults: 'no'
+      - update-xcode-project-provisioning@1:
+          inputs:
+            - code_sign_style: Manual
+            - development_team: $DEVELOPER_PORTAL_TEAM
+            - provisioning_profile_specifier: $PROV_PROFILE_NAME
+            - project_target: $BITRISE_SCHEME
+            - code_sign_identity: $CODE_SIGN_IDENTITY
+            - xcode_xcodeproj_file: $IOS_PROJECT_PATH
+      - set-ios-product-bundle-identifier@1:
+          run_if: true
+          inputs:
+            - new_bundle_identifier: $BUNDLE_IDENTIFIER
+            - project_path: $IOS_PROJECT_PATH
+          title: Set BUNDLE_IDENTIFIER
+      - set-ios-version@2:
+          inputs:
+            - bundle_version: $VERSION_CODE
+            - version_short_offset: ''
+            - bundle_version_short: 0.0.1
+            - info_plist_file: $INFO_PLIST_PATH
+          title: Set Bundle Version
+    meta:
+        bitrise.io:
+            stack: osx-xcode-13.2.x
+    envs:
+        - opts:
+              is_expand: false
+          ENVFILE: .env.live-internal
+    description: >-
+        - This workflow is triggered from the build flow.
+        
+        - first, we download and unzip the node modules from the nightly build
+        flow.
+        
+        - we install cocoapods-keys and Set Secret keys.
+        
+        - we set secret keys and install certificate and profile.
+        
+        - we update Xcode Project provisioning and set bundle_identifier.
+        
+        - we set set bundle_identifier and bundle version.
+
+  IOS-Simulator-build:
+    meta:
+        bitrise.io:
+            stack: osx-xcode-13.2.x
+    envs:
+        - opts:
+              is_expand: false
+          ENVFILE: .env.live-internal
+    description: >-
+          - This workflow is triggered from the build flow.
+            
+          - Then build for simulator with XCode script
+    before_run:
+        - Common_IOS_Steps
+    steps:
+        - install-react-native@0:
+              inputs:
+                  - npm_options: '--force'
+        - npm@1:
+              inputs:
+                  - command: 'run build:ios-js-bundle'
+                  - npm_version: $NPM_VERSION
+        - script@1:
+              title: Xcode build for simulator script
+              inputs:
+                  - content: >-
+                        #!/usr/bin/env bash
+                        # fail if any commands fails
+                        set -e
+                        # make pipelines' return status equal the last command to exit with
+                        a non-zero status, or zero if all commands exit successfully
+                        set -o pipefail
+                        # debug log
+                        set -x
+                        cd /Users/vagrant/git/ios
+
+
+                        xcodebuild -derivedDataPath /Users/vagrant/git/ios/DerivedData   ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -scheme MeinVodafone -configuration Debug -sdk iphonesimulator  -workspace $IOS_WORKSPACE_PATH  -destination "generic/platform=iOS Simulator"  "build" | xcpretty
+
+
+                        cp -r /Users/vagrant/git/ios/MeinVodafone/main.jsbundle /Users/vagrant/git/ios/DerivedData/Build/Products/Debug-iphonesimulator/MeinVodafone.app
+
+
+                        cp -r /Users/vagrant/git/ios/assets /Users/vagrant/git/ios/DerivedData/Build/Products/Debug-iphonesimulator/MeinVodafone.app
+
+
+                        mkdir /tmp/archive 
+
+
+                        cp -r /Users/vagrant/git/ios/DerivedData/Build/Products/Debug-iphonesimulator/MeinVodafone.app /tmp/archive/
+
+
+                        cd /tmp
+
+
+                        tar czvf archive.tar.gz archive
+        - deploy-to-bitrise-io@2:
+              inputs:
+                  - deploy_path: /tmp/archive.tar.gz
+          
+  SUB_Android-build:
+    steps:
+      - get-app@0:
+          inputs:
+            - access_token: $PERSONAL_ACCESS_TOKEN
+            - app_slug: $BITRISE_APP_SLUG
+            - workflow: Build-App
+            - directory_name: ''
+            - artifact_name: git.zip
+          title: Download node_modules
+      - unzip@0:
+          inputs:
+            - output_path: ''
+            - archive_path: git.zip
+      - script@1:
+          inputs:
+            - content: >-
+                #!/usr/bin/env bash
+
+                # fail if any commands fails
+
+                set -e
+
+                # make pipelines' return status equal the last command to exit with
+                a non-zero status, or zero if all commands exit successfully
+
+                set -o pipefail
+
+                # debug log
+
+                set -x
+
+                envman add --key JFROG_NETPERFORM_READ_USER --value $JFROG_NETPERFORM_READ_USER
+
+                envman add --key JFROG_NETPERFORM_READ_TOKEN --value $JFROG_NETPERFORM_READ_TOKEN
+
+                envman add --key JFROG_NETPERFORM_REPO --value $JFROG_NETPERFORM_REPO
+
+                source ~/.bashrc;
+
+                # or run a script from your repository, like:
+
+                # bash ./path/to/script.sh
+
+                # not just bash, e.g.:
+
+                # ruby ./path/to/script.rb
+          title: export netperform credentials to system
+      - change-android-applicationid@1:
+          inputs:
+            - new_application_id: com.meinvodafone.rn.dev
+            - build_gradle_path: $BUILD_GRADLE_PATH
+      - change-android-versioncode-and-versionname@1:
+          inputs:
+            - new_version_name: 0.0.1
+            - new_version_code: $VERSION_CODE
+            - build_gradle_path: $BUILD_GRADLE_PATH
+          title: Set APK Version
+      - npm@1:
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: run set-android-keys
+          title: Set Secret Keys
+      - gradle-runner@2:
+          inputs:
+            - cache_level: none
+            - gradlew_path: $ANDROID_PROJECT_PATH/gradlew
+            - gradle_file: $ANDROID_PROJECT_PATH/build.gradle
+            - gradle_task: app:assembleRelease
+          title: Build APK
+      - deploy-to-bitrise-io@2:
+          inputs:
+            - notify_user_groups: none
+            - deploy_path: $BITRISE_APK_PATH
+          title: Deploy APK to Artifacts
+          is_always_run: false
+      - firebase-app-distribution@0:
+          run_if: '{{enveq "SEND_TO_FIREBASE" "true"}}'
+          inputs:
+            - app_path: $BITRISE_APK_PATH
+            - app: $FB_NIGHTLY_ANDROID_ID
+            - release_notes: |-
+                Nightly Build (#$VERSION_CODE) from "develop" branch
+                Changelog:
+                $Release_Notes
+            - testers: ''
+            - groups: $FB_TESTERS_GROUPS
+            - firebase_token: $FIREBASE_TOKEN
+          title: Send APK to FB
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+    envs:
+      - opts:
+          is_expand: false
+        ENVFILE: .env.live-internal
+    description: >-
+      - This workflow is triggered from the nightly_build flow.
+
+
+      - first, we download and unzip the node modules from the nightly build
+      flow.
+
+
+      - update app id.
+
+
+      - set APK version.
+
+
+      - set Secret Keys and Build APK.
+
+
+      - Deploy APK to Artifacts.
+
+
+      - Send APK to FB.
+  SUB_IOS-build:
+    steps:
+      - xcode-archive@4:
+          inputs:
+            - distribution_method: enterprise
+            - artifact_name: $BITRISE_SCHEME
+            - compile_bitcode: 'no'
+            - upload_bitcode: 'no'
+            - export_all_dsyms: 'no'
+            - export_development_team: $DEVELOPER_PORTAL_TEAM
+            - project_path: $IOS_WORKSPACE_PATH
+          title: Build IPA
+      - deploy-to-bitrise-io@2:
+          run_if: true
+          inputs:
+            - is_compress: 'true'
+            - notify_user_groups: none
+            - deploy_path: $BITRISE_IPA_PATH
+          title: Deploy IPA to Artifacts
+          is_always_run: false
+      - firebase-app-distribution@0:
+          run_if: '{{enveq "SEND_TO_FIREBASE" "true"}}'
+          title: Send IPA to FB
+          inputs:
+            - app_path: $BITRISE_IPA_PATH
+            - app: $FB_NIGHTLY_IOS_ID
+            - release_notes: |-
+                Nightly Build (#$VERSION_CODE) from "develop" branch
+                Changelog:
+                $Release_Notes
+            - testers: ''
+            - groups: $FB_TESTERS_GROUPS
+            - firebase_token: $FIREBASE_TOKEN
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+    envs:
+      - opts:
+          is_expand: false
+        ENVFILE: .env.live-internal
+    description: >-
+      - This workflow is triggered from the build flow.
+
+
+      - first, we run the Common IOS Steps flow
+
+      - we build IPA, deploy it to artifacts and send it to FB.
+    before_run:
+      - Common_IOS_Steps
+  TEST_CMS:
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - authenticate-with-github-oauth@0:
+          inputs:
+            - access_token: $GITHUB_TOKEN_VFDE_CICD
+            - username: $cicd_git_user
+      - git-clone@6: {}
+      - script@1:
+          inputs:
+            - content: >+
+                #!/usr/bin/env bash
+
+                # fail if any commands fails
+
+                set -e
+
+                # debug log
+
+                set -x
+
+
+                #sleep 80000000
+
+
+                # download cms scripts 
+
+
+                curl -H "Authorization: token  $GITHUB_TOKEN_VFDE_CICD" -O 
+                https://raw.githubusercontent.com/am-vodafone/Scripts/CMS/DownloadCMS.py
+
+
+
+                curl -H "Authorization: token  $GITHUB_TOKEN_VFDE_CICD" -O
+                https://raw.githubusercontent.com/amvodafone/Scripts/CMS/DownloadPoEditorStrings.py
+
+
+                curl -H "Authorization: token  $GITHUB_TOKEN_VFDE_CICD" -O 
+                https://raw.githubusercontent.com/amvodafone/Scripts/CMS/Parameters.json
+
+
+
+                cat Parameters.json
+
+
+                #install libiraries 
+
+
+
+                #brew install python3
+
+                pip3 install requests 
+
+
+
+
+                #running scripts 
+
+
+                cp DownloadCMS.py DownloadPoEditorStrings.py Parameters.json Scripts
+
+                python3 Scripts/DownloadCMS.py 
+
+
+
+                #curl -H "Authorization: token  $GITHUB_TOKEN_VFDE_CICD" -O 
+                https://raw.githubusercontent.com/amvodafone/Scripts/CMS/Parameters.json
+
+          title: get-and-run-cms-scripts.sh
+      - script@1:
+          inputs:
+            - content: >+
+                #!/usr/bin/env bash
+
+                # fail if any commands fails
+
+                set -e
+
+                # debug log
+
+                set -x
+
+
+
+
+                # PR auto 
+
+
+                brew install hub
+
+
+
+
+                #get branch name 
+
+
+                cd /tmp
+
+                git init 
+
+                git remote add origin https://github.com/am-vodafone/MVF-iOS
+
+                git fetch --all
+
+                base_branch=$(git branch -a --contains $BITRISE_GIT_TAG
+                --sort=-committerdate | head -n 1 |awk '{$1=$1};1' | cut -d / -f3-)
+
+
+
+
+                # create PR 
+
+
+                cd $BITRISE_SOURCE_DIR
+
+
+                merge_branch="merge/Bitrise_Changes_to_$base_branch"
+
+                hub config --global url."https://github.com/".insteadOf
+                "git@github.com:"
+
+                hub config --global user.name "VFDE-CICD"
+
+                hub config --global user.email VFDE-CICD@vodafone.com
+
+
+
+                existed_in_remote=$(git ls-remote --heads origin ${merge_branch})
+
+
+
+                if [[ -z ${existed_in_remote} ]]; then
+                        hub checkout -b $merge_branch
+                    else
+                        hub checkout  $merge_branch
+                    fi
+
+
+
+                #hub checkout -b $merge_branch
+
+
+
+
+                hub commit -a -m 'adding Bitrise Changes'
+
+                hub status
+
+                hub push origin $merge_branch --force
+
+
+
+                #reviewer=am-vodafone/ios-team
+
+
+
+                export GITHUB_TOKEN=$GITHUB_TOKEN_VFDE_CICD
+
+
+                if ! hub pull-request --base="$base_branch" --head="$merge_branch"
+                --labels=merge,bitrise --reviewer= ahmed.mahmoudyoussef@vodafone.com
+                --assign=VFDE-CICD --message="[Bitrise] CICD Changes from
+                $BITRISE_GIT_TAG " 2>error.log; then
+                    if   grep -q -F 'already exists' error.log   ; then
+                       echo 'PR already exists' >&2
+                       exit 0
+                    elif  grep -q -F 'No commits between' error.log   ; then
+                       echo 'No commits between the two branches' >&2
+                       exit 0
+                    else  
+                       cat error.log
+                       exit 1 
+
+                    fi
+                fi
+
+
+
+          title: post-build-pr.sh
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+    envs:
+      - opts:
+          is_expand: false
+        ENVFILE: .env.live-internal
+  TEST_update-localization:
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - authenticate-with-github-oauth@0:
+          inputs:
+            - access_token: $GITHUB_TOKEN_RN_CICD
+            - username: $cicd_git_user
+      - git-clone@6: {}
+      - npm@1:
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: install axios -g
+          title: Install Axios
+      - npm@1:
+          inputs:
+            - npm_version: $NPM_VERSION
+            - command: install dotenv -g
+          title: Install dotenv
+      - script@1:
+          inputs:
+            - content: >-
+                #!/usr/bin/env bash
+
+                set -e
+
+                set -x
+
+                git config --global user.name "VFDE-CICD"
+
+                git config --global user.email VFDE-CICD@vodafone.com
+
+                git push --delete
+                https://$GITHUB_ACCOUNT_NAME:$GITHUB_TOKEN_VFDE_CICD@github.com/am-vodafone/MVF-RN.git 
+                Update-CMS-pipeline || true
+
+
+                git checkout -b Update-CMS-pipeline
+
+
+                npm run update-cms-files
+
+
+                git commit -am "Update-CMS-pipeline"
+
+                git push --set-upstream
+                https://$GITHUB_ACCOUNT_NAME:$GITHUB_TOKEN_VFDE_CICD@github.com/am-vodafone/MVF-RN.git 
+
+
+                brew install gh
+
+
+                export GH_TOKEN=$GH_TOKEN
+
+
+                gh pr create --base develop --head Update-CMS-pipeline
+                --title Update-CMS-pipeline --body CMS-pr
+
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+    envs:
+      - opts:
+          is_expand: false
+        ENVFILE: .env.live-internal
+  white-source:
+    steps:
+      - authenticate-with-github-oauth@0:
+          inputs:
+            - access_token: $GITHUB_TOKEN_VFDE_CICD
+            - username: $cicd_git_user
+      - script@1:
+          title: MEND (whitesource) script
+          inputs:
+            - content: >
+                #!/usr/bin/env bash
+
+                # fail if any commands fails
+
+                set -e
+
+                # debug log
+
+                set -x
+
+
+
+
+
+
+
+                git clone -b $BITRISE_GIT_BRANCH --single-branch
+                https://github.com/am-vodafone/MVF-RN.git
+
+
+                #git clone -b release/11.8-rc.1 --single-branch
+                https://github.com/am-vodafone/MVF-iOS
+
+
+
+                git clone -b Danger --single-branch
+                https://github.com/am-vodafone/guidelines
+
+
+
+
+                #curl -H "Authorization: token  $GITHUB_TOKEN_VFDE_CICD" -O
+                https://raw.githubusercontent.com/am-vodafone/guidelines/Danger/MVF-ANDROID/wss-uniffied-agent.config
+
+
+
+
+                curl -LO
+                https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar && ls
+                -la && chmod 777 wss-unified-agent.jar
+
+
+                cd guidelines/RN
+
+
+                sed -i -e 's/APIKEY/'"$APIKEY"'/g' wss-uniffied-agent.config
+
+
+                sed -i -e 's/USERKEY/'"$USERKEY"'/g' wss-uniffied-agent.config
+
+
+                sed -i -e 's#PROJECTTOKEN#'"$PROJECTTOKEN"'#g'
+                wss-uniffied-agent.config
+
+
+                sed -i -e 's#PRODUCTTOKEN#'"$PRODUCTTOKEN"'#g'
+                wss-uniffied-agent.config
+
+
+
+                cd ../..
+
+
+                mv guidelines/RN/wss-uniffied-agent.config MVF-RN
+
+
+                mv wss-unified-agent.jar MVF-RN
+
+
+                cd MVF-RN
+
+
+
+                #sed -i 's|settings.xml|$MAVEN_SETTINGS|g' $WSCONFIG
+
+
+
+                java -jar wss-unified-agent.jar -c wss-uniffied-agent.config
+
+
+
+
+
+                #java -jar wss-unified-agent.jar -d .
+
+                #java -jar wss-unified-agent.jar -c $WSCONFIG
+
+
+
+
+
+
+                #git tag | wc -l #1623
+          is_always_run: true
+      - microsoft-teams-integration@2:
+          run_if: false
+          inputs:
+            - enable_debug: 'yes'
+            - webhook_url: $TEAMS_WEBHOOK
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+  trigger_android_ios_builds_in_parallel:
+    steps:
+      - script@1:
+            inputs:
+                - content: >-
+                      #!/usr/bin/env bash
+
+                      set -ex
+
+                      if [ -z "$GENERATE_BUILDS_INPUT" ] ; then
+
+                      envman add --key GENERATE_IOS_BUILD --value "true"
+
+                      envman add --key GENERATE_ANDROID_BUILD --value "true"
+
+                      envman add --key GENERATE_SIMULATOR_BUILD --value "false"
+
+                      else
+
+                      if [[ "$GENERATE_BUILDS_INPUT" == *"ios"* ]]; then
+
+                      envman add --key GENERATE_IOS_BUILD --value "true"
+
+                      fi
+
+                      if [[ "$GENERATE_BUILDS_INPUT" == *"android"* ]]; then
+
+                      envman add --key GENERATE_ANDROID_BUILD --value "true"
+
+                      fi
+
+                      if [[ "$GENERATE_BUILDS_INPUT" == *"simulator"* ]]; then
+
+                      envman add --key GENERATE_SIMULATOR_BUILD --value "true"
+
+                      fi
+
+                      fi
+
+      - trigger-bitrise-workflow@0:
+          title: Trigger Android Build workflow          
+          run_if: '{{getenv "GENERATE_ANDROID_BUILD" | eq "true"}}'
+          inputs:
+            - workflow_id: SUB_Android-build
+            - exported_environment_variable_names: VERSION_CODE|SEND_TO_FIREBASE|Release_Notes
+            - api_token: $BUILD_TRIGGER_TOKEN
+      - trigger-bitrise-workflow@0:
+          title: Trigger iOS Build workflow
+          run_if: '{{getenv "GENERATE_IOS_BUILD" | eq "true"}}'
+          inputs:
+            - workflow_id: SUB_IOS-build
+            - exported_environment_variable_names: VERSION_CODE|SEND_TO_FIREBASE|Release_Notes
+            - api_token: $BUILD_TRIGGER_TOKEN
+      - trigger-bitrise-workflow@0:
+          title: Trigger iOS Build for Simulator workflow
+          run_if: '{{getenv "GENERATE_SIMULATOR_BUILD" | eq "true"}}'
+          inputs:
+            - api_token: $BUILD_TRIGGER_TOKEN
+            - workflow_id: IOS-Simulator-build
+            - exported_environment_variable_names: VERSION_CODE|GENERATE_IOS_SIMULATOR_BUILD
+meta:
+  bitrise.io:
+    stack: linux-docker-android-20.04
+app:
+  envs:
+    - opts:
+        is_expand: false
+      PROJECT_LOCATION: android
+    - MODULE: App
+      opts:
+        is_expand: false
+    - opts:
+        is_expand: false
+      VARIANT: ''
+    - opts:
+        is_expand: false
+      BITRISE_PROJECT_PATH: ios/MeinVodafone.xcworkspace
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: MeinVodafone
+    - opts:
+        is_expand: false
+      BITRISE_DISTRIBUTION_METHOD: enterprise
+    - opts:
+        is_expand: false
+      IOS_WORKSPACE_PATH: ios/MeinVodafone.xcworkspace
+    - opts:
+        is_expand: false
+      ANDROID_PROJECT_PATH: android
+    - opts:
+        is_expand: false
+      DEVELOPER_PORTAL_TEAM: 47TK4WR8YE
+    - opts:
+        is_expand: false
+      BUNDLE_IDENTIFIER: com.meinvodafone.rn.dev
+    - opts:
+        is_expand: false
+      IOS_PROJECT_PATH: ios/MeinVodafone.xcodeproj
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx4096m -XX:+HeapDumpOnOutOfMemoryError"'
+    - opts:
+        is_expand: false
+      JAVA_OPTIONS: '-Xms512m -Xmx2048m'
+    - opts:
+        is_expand: false
+      INFO_PLIST_PATH: ios/MeinVodafone/Info.plist
+    - opts:
+        is_expand: false
+      ANDROID_MANIFEST_PATH: android/app/src/main/AndroidManifest.xml
+    - opts:
+        is_expand: false
+      FB_NIGHTLY_ANDROID_ID: '1:155296924604:android:433016d0475ba0f4ec61b9'
+    - opts:
+        is_expand: false
+      FB_NIGHTLY_IOS_ID: '1:155296924604:ios:8f86e9b328d2fb39ec61b9'
+    - opts:
+        is_expand: false
+      NPM_VERSION: 6.14.15
+    - GIT_REVISION_URL: >-
+        https://github.com/am-vodafone/guidelines/raw/Danger/RN/git_revision-0.6.0-linux-x64.tar.gz
+    - GIT_REVISION_FILE_NAME: 'git_revision-0.7.1-linux-x64.tar.gz'
+    - APP_ID: a0ad03a537365b28
+    - CODE_SIGN_IDENTITY: iPhone Distribution
+    - PROV_PROFILE_NAME: MeinVodafone_RN_Dev_InHouse_profile
+    - BUILD_GRADLE_PATH: android/app/build.gradle
+    - GITHUB_ACCOUNT_NAME: VFDECICD
+    - opts:
+        is_expand: false
+      FB_TESTERS_GROUPS: rn-adhoc-test
+    - opts:
+        is_expand: false
+      FILE_NPMRC_GPG_PATH: .npmrc.gpg
+    - opts:
+        is_expand: false
+      FILE_NPMRC_PATH: .npmrc
+    - opts:
+        is_expand: false
+      FILE_KEYS_JSON_GPG_PATH: keys.json.gpg
+    - opts:
+        is_expand: false
+      FILE_KEYS_JSON_PATH: keys.json
+    - opts:
+        is_expand: false
+      FILE_ANDROID_G_SERVICES_JSON_GPG_PATH: android/app/google-services.json.gpg
+    - opts:
+        is_expand: false
+      FILE_ANDROID_G_SERVICES_JSON_PATH: android/app/google-services.json
+    - opts:
+        is_expand: false
+      FILE_IOS_G_SERVICES_PLIST_GPG_PATH: ios/MeinVodafone/GoogleService-Info.plist.gpg
+    - opts:
+        is_expand: false
+      FILE_IOS_G_SERVICES_PLIST_PATH: ios/MeinVodafone/GoogleService-Info.plist

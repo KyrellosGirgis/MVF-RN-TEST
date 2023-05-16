@@ -1,0 +1,45 @@
+const STORAGE_KEYS = {
+  isBiometricsOn: 'isBiometricsOn',
+  isOnboardingFinished: 'isOnboardingFinished',
+  isPreOnboardingShown: 'isPreOnboardingShown',
+  loginType: 'loginType',
+  isJailBrokenOrRootedAlertShown: 'isJailBrokenOrRootedAlertShown',
+  username: 'username',
+  password: 'password',
+  previousUsagesTilesIds: 'previousUsagesTilesIds',
+  loggedInMintUserId: 'loggedInMintUserId',
+  shouldLogNetworkRequests: 'isLoggingNetworkRequest',
+  MOCKS_CONFIGS: 'mockingConfigs',
+  MOCK_OBJECT: 'mockingObject',
+  umdid: 'umdid',
+  umid: 'umid',
+  hashing: 'hashing',
+  lastTimeLocalisationsUpdated: 'lastTimeLocalisationsUpdated',
+  lastTimeCMSUpdated: 'lastTimeCMSUpdated',
+  selectedLanguage: 'selectedLanguage',
+  lastCookieRefreshDate: 'lastCookieRefreshDate',
+  networkLogs: 'networkRequestsLogs',
+  shouldSkipCaptcha: 'shouldSkipCaptcha',
+  isOnboardingDevicePermissionsFinished:
+    'isOnboardingDevicePermissionsFinished',
+  TEALIUM_ENV: 'tealium_env',
+  mockedCMSRootURL: 'mockedCMSRootURL',
+  selectedAdobeTestTarget: 'selectedAdobeTestTarget',
+  CMS_ITEMS: {
+    INTERNATIONALISATION: 'internationalisation',
+    DEEPLINKS: 'deeplinks',
+    FEATURES: 'features',
+    WEBVIEW: 'webview',
+    PRIVACY: 'privacy',
+    LOCAL_EN: 'internationalisation_en_GB',
+    LOCAL_DE: 'internationalisation_de_DE',
+    SECURED_SCREENS: 'securedScreens'
+  },
+  consentVersion: 'consentVersion',
+  legacyCookies: 'legacyCookies',
+  mockedWebCookies: 'mockedWebCookies',
+  loginData: 'loginData',
+  shouldDebugWebView: 'shouldDebugWebView'
+}
+
+export default STORAGE_KEYS

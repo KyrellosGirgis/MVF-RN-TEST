@@ -1,0 +1,187 @@
+{
+  "serviceUsageVBO": {
+    "accountId": "111112222",
+    "type": "mobile",
+    "billDetails": {
+      "billCycleStartDate": "2021-12-05",
+      "billCycleEndDate": "2022-01-04",
+      "currentSummary": null,
+      "lastSummary": null
+    },
+    "usageAccounts": [
+      {
+        "details": {
+          "msisdn": "4912222222222",
+          "marketCode": "MMC",
+          "amount": "0.00",
+          "unitOfMeasure": "EUR",
+          "billDate": "2021-12-05",
+          "lastUpdateDate": null
+        },
+        "productSpecification": {
+          "tariffDetails": {
+            "name": "Vodafone Red XS ohne Smartphone",
+            "code": "ABCDEF",
+            "description": "Red 6 Tariff 2020"
+          }
+        },
+        "paymentGroup": [
+          {
+            "description": "Telefonieren",
+            "payment": [
+              {
+                "category": "Aus dem deutschen Vodafone-Netz",
+                "amount": "0.00",
+                "previousAmount": "0.00",
+                "unitOfMeasure": "EUR",
+                "startDate": "2021-12-05",
+                "endDate": "2022-01-04",
+                "lastUpdateDate": null
+              },
+              {
+                "category": "Im Ausland",
+                "amount": "0.00",
+                "previousAmount": "0.00",
+                "unitOfMeasure": "EUR",
+                "startDate": "2021-12-05",
+                "endDate": "2022-01-04",
+                "lastUpdateDate": null
+              }
+            ]
+          },
+          {
+            "description": "Daten/SMS/MMS/Fax",
+            "payment": [
+              {
+                "category": "Aus dem deutschen Vodafone-Netz",
+                "amount": "0.00",
+                "previousAmount": "0.00",
+                "unitOfMeasure": "EUR",
+                "startDate": "2021-12-05",
+                "endDate": "2022-01-04",
+                "lastUpdateDate": null
+              },
+              {
+                "category": "Im Ausland",
+                "amount": "0.00",
+                "previousAmount": "0.00",
+                "unitOfMeasure": "EUR",
+                "startDate": "2021-12-05",
+                "endDate": "2022-01-04",
+                "lastUpdateDate": null
+              }
+            ]
+          }
+        ],
+        "usageGroup": [
+          {
+            "container": "SMS",
+            "usage": [
+              {
+                "name": "Nationale Flat in alle deutschen Netze und im EU-Ausland",
+                "description": "Nationale Flat in alle deutschen Netze und im EU-Ausland",
+                "type": "limited",
+                "rollOverIndicator": false,
+                "upgradable": false,
+                "limitStatus": false,
+                "isLimitedMember": false,
+                "remaining": "0",
+                "used": "0",
+                "total": "0",
+                "unitOfMeasure": "SMS",
+                "lastUpdateDate": null,
+                "endDate": null
+              }
+            ]
+          },
+          {
+            "container": "Minuten",
+            "usage": [
+              {
+                "name": "Nationale Flat in alle deutschen Netze und im EU-Ausland",
+                "description": "Nationale Flat in alle deutschen Netze und im EU-Ausland",
+                "type": "limited",
+                "rollOverIndicator": false,
+                "upgradable": false,
+                "limitStatus": false,
+                "isLimitedMember": false,
+                "remaining": "0",
+                "used": "12",
+                "total": "0",
+                "unitOfMeasure": "Minuten",
+                "lastUpdateDate": "2021-12-14T16:32:48",
+                "endDate": null
+              }
+            ]
+          },
+          {
+            "container": "Daten",
+            "usage": [
+              {
+                "name": "Datenvolumen Inland & EU",
+                "description": "Datenvolumen Inland & EU",
+                "type": "limited",
+                "rollOverIndicator": false,
+                "upgradable": true,
+                "isLimitedMember": false,
+                "remaining": "5872",
+                "used": "371",
+                "total": "6244",
+                "unitOfMeasure": "MB",
+                "lastUpdateDate": "2021-12-15T12:48:46",
+                "endDate": null,
+                "code": "-1"
+              },
+              {
+                "name": "Vodafone Pässe",
+                "description": "Vodafone Pässe",
+                "type": "limited",
+                "rollOverIndicator": false,
+                "upgradable": true,
+                "isLimitedMember": false,
+                "remaining": "104857580",
+                "used": "19",
+                "total": "104857600",
+                "unitOfMeasure": "MB",
+                "lastUpdateDate": "2021-12-15T12:48:46",
+                "endDate": null,
+                "code": "-2"
+              },
+              {
+                "name": "Vodafone Pass im EU-Ausland",
+                "description": "Vodafone Pass im EU-Ausland",
+                "type": "limited",
+                "rollOverIndicator": false,
+                "upgradable": true,
+                "isLimitedMember": false,
+                "remaining": "55296",
+                "used": "0",
+                "total": "55296",
+                "unitOfMeasure": "MB",
+                "lastUpdateDate": "2021-12-15T12:48:46",
+                "endDate": null,
+                "code": "-3"
+              },
+              {
+                "name": "GigaDepot-Datenvolumen Inland & EU",
+                "description": "GigaDepot-Datenvolumen Inland & EU",
+                "type": "limited",
+                "rollOverIndicator": true,
+                "upgradable": false,
+                "limitStatus": false,
+                "isLimitedMember": false,
+                "remaining": "4882",
+                "used": "0",
+                "total": "4882",
+                "unitOfMeasure": "MB",
+                "lastUpdateDate": "2021-12-15T12:48:46",
+                "endDate": null,
+                "code": "-5"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "internationalisation": {
+    "default_locale": "de",
+    "device_language_selection_label": "i18n_deviceLanguageSelection_label",
+    "translation_items": [
+      {
+        "timestamp": "1655964303",
+        "cms-guid": "31EE35CD662645EAB37F41E3D5D80E57",
+        "cms-id": "10",
+        "locale": "en",
+        "id": "internationalisation_en_GB",
+        "display_name": "English (GB)",
+        "icon": "https://cdn.pixabay.com/photo/2012/04/10/16/14/union-jack-26119_960_720.png",
+        "resource": "https://am-vodafone.github.io/MVF-RN/cms/internationalisation_en_GB.json"
+      },
+      {
+        "timestamp": "1655964303",
+        "cms-guid": "B0072012B4F3408CBAB896A582CD035C",
+        "cms-id": "9",
+        "locale": "de",
+        "id": "internationalisation_de_DE",
+        "display_name": "Deutsch",
+        "icon": "https://cdn.pixabay.com/photo/2012/04/12/23/52/germany-31017_960_720.png",
+        "resource": "https://am-vodafone.github.io/MVF-RN/cms/internationalisation_de_DE.json"
+      }
+    ]
+  }
+}

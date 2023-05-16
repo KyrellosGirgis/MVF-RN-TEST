@@ -1,0 +1,16 @@
+diff --git a/node_modules/@vfgroup-oneplatform/onboarding/Components/BackgroundView/BackgroundView.js b/node_modules/@vfgroup-oneplatform/onboarding/Components/BackgroundView/BackgroundView.js
+index 13c6e5c..6b08226 100644
+--- a/node_modules/@vfgroup-oneplatform/onboarding/Components/BackgroundView/BackgroundView.js
++++ b/node_modules/@vfgroup-oneplatform/onboarding/Components/BackgroundView/BackgroundView.js
+@@ -30,10 +30,7 @@ const BackgroundView = ({
+     }
+   };
+ 
+-  const accessibility =
+-    Platform.OS === 'android'
+-      ? { accessibilityLabel: OnBoardingTestkeys.vfLogo }
+-      : { testID: OnBoardingTestkeys.vfLogo };
++  const accessibility = { testID: OnBoardingTestkeys.vfLogo };
+ 
+   const backgroundGradientOrientation = { start: { x: 1, y: 0 }, end: { x: 0, y: 0.5 } };
+ 

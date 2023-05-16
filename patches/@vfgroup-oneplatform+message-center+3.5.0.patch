@@ -1,0 +1,171 @@
+diff --git a/node_modules/@vfgroup-oneplatform/message-center/Components/MessageCenterCard/MessageCenterCard.js b/node_modules/@vfgroup-oneplatform/message-center/Components/MessageCenterCard/MessageCenterCard.js
+index 44c69d2..ae34bb4 100644
+--- a/node_modules/@vfgroup-oneplatform/message-center/Components/MessageCenterCard/MessageCenterCard.js
++++ b/node_modules/@vfgroup-oneplatform/message-center/Components/MessageCenterCard/MessageCenterCard.js
+@@ -49,7 +49,7 @@ const MessageCenterCard = props => {
+             }}
+             style={styles.primaryCardButton}
+             textStyle={styles.cardButtonText}
+-            testKey={MessageCenterTestKeys.MCUpgradeNowButton + `${index + 1}`}
++            testKey={MessageCenterTestKeys.MCUpgradeNowButton}
+             type="primary"
+           />
+           <VFButton
+@@ -59,7 +59,7 @@ const MessageCenterCard = props => {
+             }}
+             style={styles.secondaryCardButton}
+             textStyle={styles.cardButtonText}
+-            testKey={MessageCenterTestKeys.MCSettingsButton + `${index + 1}`}
++            testKey={MessageCenterTestKeys.MCSettingsButton}
+             type="secondary"
+           />
+         </View>
+@@ -74,7 +74,7 @@ const MessageCenterCard = props => {
+             }}
+             style={[styles.primaryCardButton, withWideActionButton && styles.fullwidth]}
+             textStyle={styles.cardButtonText}
+-            testKey={MessageCenterTestKeys.MCUpgradeNowButton + `${index + 1}`}
++            testKey={MessageCenterTestKeys.MCUpgradeNowButton}
+           />
+         </View>
+       );
+@@ -91,7 +91,7 @@ const MessageCenterCard = props => {
+         <VFText
+           type="primary"
+           style={styles.cardBodyText(messageCenterColors)}
+-          testKey={MessageCenterTestKeys.MCMsgBody + `${index + 1}`}
++          testKey={MessageCenterTestKeys.MCMsgBody}
+           i18nKey={item.body}
+           localize={false}
+           numberOfLines={withFullBody ? 0 : 3}
+@@ -100,8 +100,8 @@ const MessageCenterCard = props => {
+     }
+     return (
+       <Animated.View
+-        accessibilityLabel={MessageCenterTestKeys.msgBody + `${index + 1}`}
+-        testID={MessageCenterTestKeys.msgBody + `${index + 1}`}
++        accessibilityLabel={MessageCenterTestKeys.msgBody}
++        testID={MessageCenterTestKeys.msgBody }
+       >
+         {messageBodyComponent}
+       </Animated.View>
+@@ -120,8 +120,8 @@ const MessageCenterCard = props => {
+         onPress={handelPressShowMore}
+         testID={
+           isOpen
+-            ? MessageCenterTestKeys.MCShowLessButton + `${index + 1}`
+-            : MessageCenterTestKeys.MCShowMoreButton + `${index + 1}`
++            ? MessageCenterTestKeys.MCShowLessButton
++            : MessageCenterTestKeys.MCShowMoreButton
+         }
+       >
+         <View
+@@ -202,8 +202,8 @@ const MessageCenterCard = props => {
+ 
+   const accessibilityID =
+     Platform.OS === 'android'
+-      ? { accessibilityLabel: MessageCenterTestKeys.MCMsg + `${index + 1}` }
+-      : { testID: MessageCenterTestKeys.MCMsg + `${index + 1}` };
++      ? { accessibilityLabel: MessageCenterTestKeys.MCMsg}
++      : { testID: MessageCenterTestKeys.MCMsg};
+ 
+   const _renderMessageIcon = style => {
+     if (_isFunction(renderMessageIcon)) {
+@@ -215,8 +215,8 @@ const MessageCenterCard = props => {
+     return (
+       <View
+         style={[styles.iconContainerStyle, style]}
+-        testID={MessageCenterTestKeys.MCMsgIcon + `${index + 1}`}
+-        accessibilityLabel={MessageCenterTestKeys.MCMsgIcon + `${index + 1}`}
++        testID={MessageCenterTestKeys.MCMsgIcon}
++        accessibilityLabel={MessageCenterTestKeys.MCMsgIcon}
+       >
+         <Icon
+           name={isRead ? _readIcon : _unreadIcon}
+@@ -230,10 +230,10 @@ const MessageCenterCard = props => {
+     return (
+       <View
+         style={styles.titleContainer}
+-        testID={MessageCenterTestKeys.MCMsgTitleView + `${index + 1}`}
++        testID={MessageCenterTestKeys.MCMsgTitleView}
+       >
+         <VFText
+-          testKey={MessageCenterTestKeys.MCMsgTitle + `${index + 1}`}
++          testKey={MessageCenterTestKeys.MCMsgTitle}
+           i18nKey={title}
+           type={'primary'}
+           style={[
+@@ -250,7 +250,7 @@ const MessageCenterCard = props => {
+     return (
+       <VFText
+         type="primary"
+-        testKey={MessageCenterTestKeys.MCMsgDate + `${index + 1}`}
++        testKey={MessageCenterTestKeys.MCMsgDate}
+         i18nKey={date}
+         style={[styles.date(messageCenterColors), style]}
+       />
+diff --git a/node_modules/@vfgroup-oneplatform/message-center/Components/MessagesHeader/MessagesHeader.js b/node_modules/@vfgroup-oneplatform/message-center/Components/MessagesHeader/MessagesHeader.js
+index 07e8c56..91ae1db 100644
+--- a/node_modules/@vfgroup-oneplatform/message-center/Components/MessagesHeader/MessagesHeader.js
++++ b/node_modules/@vfgroup-oneplatform/message-center/Components/MessagesHeader/MessagesHeader.js
+@@ -11,6 +11,7 @@ import { TabEnum } from '../../Utils';
+ import MessageCenterTestKeys from '../../Utils/MessageCenterTestKeys';
+ 
+ import styles from './MessagesHeader.styles';
++import {testID} from '../../../../../App/Utils/Helpers/testId.helpers'
+ 
+ const { UNREAD_TAB, READ_TAB } = TabEnum;
+ 
+@@ -20,6 +21,14 @@ const I18nKeys = {
+     [READ_TAB]: 'messages_list_read_header',
+   },
+ };
++
++const testIDs = { 
++  messages_list_header: {
++    [UNREAD_TAB]: 'newMessagesHeader_Txt',
++    [READ_TAB]: 'myMessagesHeader_Txt'
++  }
++}
++
+ const MessagesHeader = ({ activeTab, onMarkAllAsReadPress, onDeleteAllReadPress, theme }) => {
+   const renderMarkAllAsRead = () => {
+     return (
+@@ -71,7 +80,7 @@ const MessagesHeader = ({ activeTab, onMarkAllAsReadPress, onDeleteAllReadPress,
+       <VFText
+         i18nKey={I18nKeys.messages_list_header[activeTab]}
+         style={[styles.messagesListHeaderTitle(theme)]}
+-        testKey={MessageCenterTestKeys.messagesListHeader}
++        testKey={testID(testIDs.messages_list_header[activeTab])}
+       />
+ 
+       {activeTab == UNREAD_TAB
+diff --git a/node_modules/@vfgroup-oneplatform/message-center/Components/OfferScreen/OfferScreen.js b/node_modules/@vfgroup-oneplatform/message-center/Components/OfferScreen/OfferScreen.js
+index 77257be..0d9f079 100644
+--- a/node_modules/@vfgroup-oneplatform/message-center/Components/OfferScreen/OfferScreen.js
++++ b/node_modules/@vfgroup-oneplatform/message-center/Components/OfferScreen/OfferScreen.js
+@@ -22,6 +22,8 @@ import ConfirmationModal from '../ConfirmationModal';
+ 
+ import styles from './OfferScreen.Styles';
+ 
++import { testID } from '../../../../../App/Utils/Helpers/testId.helpers'
++
+ const OfferScreen = ({
+   onPressDelete,
+   onClose,
+@@ -77,6 +79,7 @@ const OfferScreen = ({
+         imageStyle: [styles.imageStyle(theme), styles.noImageStyle, imageStyle],
+         onClose: onClose,
+         testID: MessageCenterTestKeys.MCOfferScreenHeaderImage,
++        closeButtonTestID: MessageCenterTestKeys.MCCloseBtn,
+       };
+     }
+   };
+@@ -108,6 +111,7 @@ const OfferScreen = ({
+           title={subtitle ?? date}
+           titleStyle={styles.date(theme)}
+           testID={MessageCenterTestKeys.MCOfferScreenHeaderSection}
++          titleAccessbilityLabel={testID('detailsMsg_title_date_time')}
+           {...(withDelete && {
+             onRightSectionPress: onDeletePress,
+             rightText: 'messages_delete_text',

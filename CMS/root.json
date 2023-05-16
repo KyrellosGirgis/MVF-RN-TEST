@@ -1,0 +1,27 @@
+{
+  "app_package": {
+    "items": [
+      {
+        "timestamp": "1655964303",
+        "cms-guid": "31EE35CD662645EAB37F41E3D5D80E57",
+        "cms-id": "12",
+        "id": "internationalisation",
+        "resource": "https://am-vodafone.github.io/MVF-RN/cms/internationalisation.json"
+      },
+      {
+        "timestamp": "1650611062",
+        "cms-guid": "4471E90754DD44D6AF77FE2880ED143E",
+        "cms-id": "6080",
+        "id": "deeplinks",
+        "resource": "https://am-vodafone.github.io/MVF-RN/cms/deeplinks.json"
+      },
+      {
+        "timestamp": "1660032684",
+        "cms-guid": "736DJ90754DD44D6AF77FE2880ED748D",
+        "cms-id": "7834",
+        "id": "features",
+        "resource": "https://am-vodafone.github.io/MVF-RN/cms/features.json"
+      }
+    ]
+  }
+}

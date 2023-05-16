@@ -1,0 +1,2 @@
+const TOKEN_DEFAULT_EXP_TIME = 1200 //20 mins
+export { TOKEN_DEFAULT_EXP_TIME }

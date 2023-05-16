@@ -1,0 +1,24 @@
+{
+  "webview": {
+    "whitelisted_domains": [
+      "*.vodafone.de",
+      "vodafone.com",
+      "paypal.com",
+      "klarna.com",
+      "www.sofort.com",
+      "sofort.com",
+      "www.adyen.com",
+      "adyen.com",
+      "nebula-cdn.kampyle.com",
+      "www.amazon.de",
+      "amazon.de",
+      "pay.amazon.de",
+      "pay.amazon.com",
+      "www.amazon.com",
+      "amazon.com",
+      "braintreegateway.com",
+      "www.paypalobjects.com",
+      "*.demdex.net"
+    ]
+  }
+}

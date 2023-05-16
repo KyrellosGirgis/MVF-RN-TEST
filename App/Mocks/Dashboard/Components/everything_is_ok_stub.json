@@ -1,0 +1,71 @@
+{
+    "greeting": "Good morning",
+    "username": "Phil",
+    "title": "Just checking\neverything is OK",
+    "checks": [
+        {
+            "id": "billing_id",
+            "title": "everything_is_ok_billing_title",
+            "status": 0,
+            "icon": "ic_sim",
+            "subItems": [
+                {
+                    "id": "last_bill_paid_id",
+                    "title": "everything_is_ok_last_bill_paid_title",
+                    "description": "",
+                    "actionTitle": "",
+                    "actionClass": "",
+                    "status": 0
+                },
+                {
+                    "id": "additional_charges_id",
+                    "title": "everything_is_ok_additional_charges_title",
+                    "description": "You have £2.50 out of plan spend on your current bill. Please review these charges.",
+                    "actionTitle": "everything_is_ok_additional_charges_action_title",
+                    "actionClass": "addiotionalChargesAction.class",
+                    "status": 0
+                },
+                {
+                    "id": "billing_data_remaining_id",
+                    "title": "everything_is_ok_data_remaining_title",
+                    "description": "",
+                    "actionTitle": "",
+                    "actionClass": "",
+                    "status": 0
+                }
+            ]
+        },
+        {
+            "id": "account_id",
+            "title": "everything_is_ok_account_title",
+            "status": 0,
+            "icon": "ic_bills",
+            "subItems": [
+                {
+                    "id": "address_up_to_date_id",
+                    "title": "everything_is_ok_address_up_to_date_title",
+                    "description": "",
+                    "actionTitle": "",
+                    "actionClass": "",
+                    "status": 0
+                },
+                {
+                    "id": "payment_details_id",
+                    "title": "everything_is_ok_payment_details_title",
+                    "description": "everything_is_ok_payment_details_description",
+                    "actionTitle": "everything_is_ok_payment_details_action_title",
+                    "actionClass": "paymentDetailsAction.class",
+                    "status": 0
+                },
+                {
+                    "id": "account_data_remaining_id",
+                    "title": "everything_is_ok_data_remaining_title",
+                    "description": "",
+                    "actionTitle": "",
+                    "actionClass": "",
+                    "status": 0
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,67 @@
+{
+    "dashboard": {
+        "isLoading": false,
+        "error": null,
+        "bucket": [
+            {
+                "isShared": false,
+                "usageType": "data",
+                "isRoaming": true,
+                "footerText": "Welcome to Italy!",
+                "remainingValueName": "15.2GB",
+                "remainingValue": {
+                    "amount": 15.2,
+                    "units": "GB"
+                },
+                "counterType": "total",
+                "valueName": "33GB",
+                "value": {
+                    "amount": 33,
+                    "units": "GB"
+                }
+            },
+            {
+                "isShared": false,
+                "usageType": "unlimited",
+                "resetTextValue": 0,
+                "remainingValueName": "Unlimited",
+                "remainingValue": {
+                    "amount": "Unlimited",
+                    "units": ""
+                },
+                "counterType": "total",
+                "valueName": "",
+                "value": {}
+            },
+            {
+                "isShared": false,
+                "usageType": "voice",
+                "resetTextValue": 14,
+                "remainingValueName": "140 mins",
+                "remainingValue": {
+                    "amount": 140,
+                    "units": "mins"
+                },
+                "counterType": "total",
+                "valueName": "300 mins",
+                "value": {
+                    "amount": 300,
+                    "units": "mins"
+                }
+            },
+            {
+                "usageType": "edit"
+            }
+        ],
+        "eligibleProducts": [
+            {
+                "id": "PO123",
+                "name": "Vodafone Saver 500"
+            },
+            {
+                "id": "PO345",
+                "name": "International 500"
+            }
+        ]
+    }
+}

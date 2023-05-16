@@ -1,0 +1,30 @@
+{
+  "features": {
+    "feature_items": [
+      {
+        "timestamp": "1655990846",
+        "cms-guid": "784D35CD662645EAB37F41E3D5D8HF52",
+        "cms-id": "23",
+        "feature_name": "privacy",
+        "id": "privacy",
+        "resource": "https://am-vodafone.github.io/MVF-RN/cms/privacy.json"
+      },
+      {
+        "timestamp": "1660032684",
+        "cms-guid": "H42D35CD662645EAB37F41E3D5D8ZF53",
+        "cms-id": "26",
+        "feature_name": "webview",
+        "id": "webview",
+        "resource": "https://am-vodafone.github.io/MVF-RN/cms/webview.json"
+      },
+      {
+        "timestamp": "1660032685",
+        "cms-guid": "H42D35CD662645EAB37F41E3D5D8ZF54",
+        "cms-id": "27",
+        "feature_name": "securedScreens",
+        "id": "securedScreens",
+        "resource": "https://am-vodafone.github.io/MVF-RN/cms/securedScreens.json"
+      }
+    ]
+  }
+}

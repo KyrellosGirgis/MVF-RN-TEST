@@ -1,0 +1,13 @@
+diff --git a/node_modules/@vfgroup-oneplatform/billing/Components/ImageList/ImageList.js b/node_modules/@vfgroup-oneplatform/billing/Components/ImageList/ImageList.js
+index 242dfc9..e9152e3 100644
+--- a/node_modules/@vfgroup-oneplatform/billing/Components/ImageList/ImageList.js
++++ b/node_modules/@vfgroup-oneplatform/billing/Components/ImageList/ImageList.js
+@@ -18,7 +18,7 @@ function ImageList(props) {
+   const { theme } = props;
+   const themeImages = getThemeImages(theme?.name);
+   return (
+-    <TouchableOpacity disabled={!props.onPress} onPress={props.onPress} activeOpacity={0.7}>
++    <TouchableOpacity disabled={!props.onPress} onPress={props.onPress} activeOpacity={0.7} accessible={false}>
+       <VfView>
+         {props.showTitle && (
+           <VfView style={styles.title}>

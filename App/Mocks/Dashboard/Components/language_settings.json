@@ -1,0 +1,47 @@
+{
+    "internationalisation": {
+        "default_locale": "de",
+        "device_language_selection_label": "i18n_deviceLanguageSelection_label",
+        "translation_items": [
+            {
+                "version": "1200",
+                "timestamp": "20220222101337",
+                "cms-guid": "31EE35CD662645EAB37F41E3D5D80E57",
+                "cms-id": "10",
+                "locale": "en",
+                "display_name": "English (GB)",
+                "icon": "icBritishFlag",
+                "resource": "https://consumer-admin.wf-de.vodafone.com/cps/rde/devhub/rdesrdef.xsl/-/main.json?appv=1200&appf=/translations.xml"
+            },
+            {
+                "timestamp": "20220222101337",
+                "cms-guid": "B0072012B4F3408CBAB896A582CD035C",
+                "cms-id": "9",
+                "locale": "de",
+                "display_name": "Deutsch",
+                "icon": "vfLogo",
+                "resource": "https://consumer-admin.wf-de.vodafone.com/cps/rde/devhub/rdesrdef.xsl/-/main.json?appv=1200&appf=/translations.xml"
+            },
+            {
+                "version": "1200",
+                "timestamp": "20220222101337",
+                "cms-guid": "31EE35CD662645EAB37F41E3D5D80E57",
+                "cms-id": "10",
+                "locale": "en2",
+                "display_name": "English 2 (GB)",
+                "icon": "tobi_default",
+                "resource": "https://consumer-admin.wf-de.vodafone.com/cps/rde/devhub/rdesrdef.xsl/-/main.json?appv=1200&appf=/translations.xml"
+            },
+            {
+                "version": "1200",
+                "timestamp": "20220222101337",
+                "cms-guid": "31EE35CD662645EAB37F41E3D5D80E57",
+                "cms-id": "10",
+                "locale": "en3",
+                "display_name": "English 3 (GB)",
+                "icon": "tobi_default",
+                "resource": "https://consumer-admin.wf-de.vodafone.com/cps/rde/devhub/rdesrdef.xsl/-/main.json?appv=1200&appf=/translations.xml"
+            }
+        ]
+    }
+}
