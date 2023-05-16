@@ -17,16 +17,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Update Live CMS
+       - name: Clone Other Repository
         run: |
+          git clone https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/am-vodafone/cms-test cms-test
+
+      - name: Update CMS
+        run: |
+          cp -R CMS/* cms-test/cms
+
+      - name: Commit and Push Changes
+        run: |
+          cd cms-test
           git config user.name "GitHub Actions"
           git config user.email "kyrellous.girgis@vodafone.com"
-          git clone https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/am-vodafone/cms-test cms-test
-          rm -rf cms-test/CMS/*
-          cp -R CMS/* cms-test/CMS/
-          cd cms-test
           git add -A
           git commit -m "Update CMS"
-          git push origin HEAD:refs/heads/update-cms
-          hub pull-request -b am-vodafone:main -h KyrellousGirgis:update-cms -m "Update CMS"
+         git push origin HEAD:refs/heads/update-cms
+          hub pull-request -b am-vodafone:main -h kyrellousgirgis:update-cms -m "Update CMS"
           rm -rf cms-test
