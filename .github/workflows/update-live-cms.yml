@@ -34,7 +34,7 @@ jobs:
           git commit -m "Update CMS"
           git pull
           git pull origin main 
-          git push origin HEAD:refs/heads/update-cms
+          git push -u origin HEAD:refs/heads/update-cms
           hub pull-request -b am-vodafone:main -h kyrellousgirgis:update-cms -m "Update CMS"
           rm -rf cms-test
 
