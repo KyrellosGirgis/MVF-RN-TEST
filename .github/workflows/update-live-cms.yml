@@ -28,14 +28,14 @@ jobs:
       - name: Commit and Push Changes
         run: |
           cd cms-test
-          git config user.name "GitHubActions"
+          git config user.name "kyrellousgirgis"
           git config user.email "kyrellous.girgis@vodafone.com"
           git add -A
           git commit -m "Update CMS"
           git pull
           git pull origin main 
           git push origin HEAD:refs/heads/update-cms
-          hub pull-request -b am-vodafone:main -h GitHubActions:update-cms -m "Update CMS"
+          hub pull-request -b am-vodafone:main -h kyrellousgirgis:update-cms -m "Update CMS"
           rm -rf cms-test
 
         env:
