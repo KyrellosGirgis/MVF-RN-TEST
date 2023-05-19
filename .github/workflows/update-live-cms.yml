@@ -32,10 +32,13 @@ jobs:
           git config user.email "kyrellous.girgis@vodafone.com"
           git add -A
           git commit -m "Update CMS"
+          
           git pull
           git pull origin main 
+          
           git push origin HEAD:refs/heads/update-cms
           hub pull-request -b am-vodafone:main -h update-cms -m "Update CMS"
+          
           rm -rf cms-test
 
         env:
